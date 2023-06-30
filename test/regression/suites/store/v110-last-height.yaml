@@ -1,0 +1,31 @@
+{{ template "default-state.yaml" }}
+---
+{{ template "btc-pool-state.yaml" }}
+---
+type: state
+genesis:
+  app_state:
+    thorchain:
+      store_version: "109"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: btc pool should exist
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 1
+---
+type: check
+description: chain should have updated last block height
+endpoint: http://localhost:1317/thorchain/lastblock
+asserts:
+  - .[]|select(.chain=="BTC")|.last_observed_in==788640
+---
+# NOTE: not presently a way to test this since these are not stored in genesis.
+# type: check
+# description: validator should have updated observe height
+# endpoint: http://localhost:1317/thorchain/nodes
+# asserts:
+# - .[]|.observe_chains[]|select(.chain=="BTC")|.height==788640

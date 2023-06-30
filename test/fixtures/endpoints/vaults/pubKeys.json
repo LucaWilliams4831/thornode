@@ -1,0 +1,84 @@
+{
+  "asgard": [
+    {
+      "pub_key": "tthorpub1addwnpepqflvfv08t6qt95lmttd6wpf3ss8wx63e9vf6fvyuj2yy6nnyna576rfzjks",
+      "routers": [
+        {
+          "chain": "ETH",
+          "router": "0xE65e9d372F8cAcc7b6dfcd4af6507851Ed31bb44"
+        },
+        {
+          "chain": "AVAX",
+          "router": "0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+        }
+      ]
+    },
+    {
+      "pub_key": "tthorpub1addwnpepq2flfr96skc5lkwdv0n5xjsnhmuju20x3zndgu42zd8dtkrud9m2vajhww6",
+      "routers": [
+        {
+          "chain": "ETH",
+          "router": "0xE65e9d372F8cAcc7b6dfcd4af6507851Ed31bb44"
+        },
+        {
+          "chain": "AVAX",
+          "router": "0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+        }
+      ]
+    },
+    {
+      "pub_key": "tthorpub1addwnpepqwhnus6xs4208d4ynm05lv493amz3fexfjfx4vptntedd7k0ajlcunlfxxs",
+      "routers": [
+        {
+          "chain": "ETH",
+          "router": "0xE65e9d372F8cAcc7b6dfcd4af6507851Ed31bb44"
+        },
+        {
+          "chain": "AVAX",
+          "router": "0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+        }
+      ]
+    },
+    {
+      "pub_key": "tthorpub1addwnpepq2mza4j4vplyjw295pkq8j2dan627lz6vufeu22pjx5vnnyjted5vwq3e3d",
+      "routers": [
+        {
+          "chain": "ETH",
+          "router": "0xE65e9d372F8cAcc7b6dfcd4af6507851Ed31bb44"
+        },
+        {
+          "chain": "AVAX",
+          "router": "0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+        }
+      ]
+    }
+  ],
+  "yggdrasil": [
+    {
+      "pub_key": "tthorpub1addwnpepq27s79a9xk8hjcpjuthmwnl2z4su43uynekcjuqcnmhpemfgfrh6sm4yd8e",
+      "routers": [
+        {
+          "chain": "ETH",
+          "router": "0xE65e9d372F8cAcc7b6dfcd4af6507851Ed31bb44"
+        },
+        {
+          "chain": "AVAX",
+          "router": "0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+        }
+      ]
+    },
+    {
+      "pub_key": "tthorpub1addwnpepqtsgdw5dj7pj497vr2397pnfctf0d3lf7f2ssu39hts45567syh5xuz5jrs",
+      "routers": [
+        {
+          "chain": "ETH",
+          "router": "0xE65e9d372F8cAcc7b6dfcd4af6507851Ed31bb44"
+        },
+        {
+          "chain": "AVAX",
+          "router": "0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+        }
+      ]
+    }
+  ]
+}

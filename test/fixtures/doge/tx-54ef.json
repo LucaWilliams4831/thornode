@@ -1,0 +1,57 @@
+{
+  "result": {
+    "hex": "01000000000101a04fb7cfad15e105e9e71f9bb8f291b5685548962c2a7bdd9461117c9127d26f0100000000ffffffff0237243e0000000000160014a6eac1efcd03d067bdba35845830450901eaafd14aa9430000000000160014d9dabd8962571ab8cf5086e79b588b6d5381b8fe02483045022100aaf3c05a7fc354e5792e76035bd1317085608e50c06cf4a0018610948d8ef06b0220393d9591a3cd23365dfa41b295330a3e2213390f77c5e50b8c545afc94416623012103a5aba47143c1238f4d9ae70b659d6a9ca0ece5ae807de2d260f6f910ab1719c100000000",
+    "txid": "54ef2f4679fb90af42e8d963a5d85645d0fd86e5fe8ea4e69dbf2d444cb26528",
+    "hash": "40f403dcb5dd94992e1c5fcb3869c84fa3cf6f16772e0d0be89455424cc78857",
+    "size": 223,
+    "vsize": 141,
+    "weight": 562,
+    "version": 1,
+    "locktime": 0,
+    "vin": [
+      {
+        "txid": "6fd227917c116194dd7b2a2c96485568b591f2b89b1fe7e905e115adcfb74fa0",
+        "vout": 1,
+        "scriptSig": {
+          "asm": "",
+          "hex": ""
+        },
+        "txinwitness": [
+          "3045022100aaf3c05a7fc354e5792e76035bd1317085608e50c06cf4a0018610948d8ef06b0220393d9591a3cd23365dfa41b295330a3e2213390f77c5e50b8c545afc9441662301",
+          "03a5aba47143c1238f4d9ae70b659d6a9ca0ece5ae807de2d260f6f910ab1719c1"
+        ],
+        "sequence": 4294967295
+      }
+    ],
+    "vout": [
+      {
+        "value": 4.072503,
+        "n": 0,
+        "scriptPubKey": {
+          "asm": "0 a6eac1efcd03d067bdba35845830450901eaafd1",
+          "hex": "0014a6eac1efcd03d067bdba35845830450901eaafd1",
+          "reqSigs": 1,
+          "type": "witness_v0_keyhash",
+          "addresses": ["mv4rnyY3Su5gjcDNzbMLKBQkBicCtHUtFB"]
+        }
+      },
+      {
+        "value": 4.43425,
+        "n": 1,
+        "scriptPubKey": {
+          "asm": "0 d9dabd8962571ab8cf5086e79b588b6d5381b8fe",
+          "hex": "0014d9dabd8962571ab8cf5086e79b588b6d5381b8fe",
+          "reqSigs": 1,
+          "type": "witness_v0_keyhash",
+          "addresses": ["mv4rnyY3Su5gjcDNzbMLKBQkBicCtHUtFB"]
+        }
+      }
+    ],
+    "blockhash": "29d0a08be36846ee360a372b6ebeecf48a26334aa07c1f298fd0c823b3c26bc5",
+    "confirmations": 2,
+    "time": 1601447013,
+    "blocktime": 1601447013
+  },
+  "error": null,
+  "id": 1
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Testnet Tokens",
+  "logoURI": "",
+  "keywords": ["avalanche"],
+  "version": {
+    "major": 86,
+    "minor": 0,
+    "patch": 0
+  },
+  "tokens": [
+    {
+      "chainId": 4,
+      "address": "0x52C84043CD9c865236f11d9Fc9F56aa003c1f922",
+      "symbol": "TKN",
+      "name": "",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x333c3310824b7c685133F2BeDb2CA4b8b4DF633d",
+      "symbol": "TKN",
+      "name": "",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "name": "",
+      "symbol": "USDC",
+      "address": "0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": ""
+    }
+  ]
+}

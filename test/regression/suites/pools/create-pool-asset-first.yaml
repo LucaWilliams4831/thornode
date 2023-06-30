@@ -1,0 +1,79 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: should start with no pools
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 0
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+- tx:
+    id: '{{ observe_txid 1 }}'
+    chain: BTC
+    from_address: {{ addr_btc_cat }}
+    to_address: {{ addr_btc_dog }}
+    coins:
+      - amount: "100000000"
+        asset: "BTC.BTC"
+        decimals: 8
+    gas:
+      - amount: "10000"
+        asset: "BTC.BTC"
+    memo: "+:BTC.BTC:{{ addr_thor_cat }}"
+  block_height: 1
+  finalise_height: 1
+  observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: transaction should be observed
+endpoint: http://localhost:1317/thorchain/tx/{{ observe_txid 1 }}
+asserts:
+- .observed_tx.status == "done"
+---
+type: check
+description: LP should be created after first deposit
+endpoint: http://localhost:1317/thorchain/pool/BTC.BTC/liquidity_providers
+asserts:
+  - .|length == 1
+---
+type: check
+description: pool should not exist until second deposit
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 0
+---
+type: tx-deposit
+signer: {{ addr_thor_cat }}
+coins:
+  - amount: "200000000"
+    asset: "rune"
+memo: "+:BTC.BTC:{{ addr_btc_cat }}"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: pool should be created
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 1
+  - .[0].LP_units == "200000000"
+  - .[0].pending_inbound_asset == "0"
+  - .[0].pending_inbound_rune == "0"
+---
+type: check
+description: LP should match pool with no pending deposit
+endpoint: http://localhost:1317/thorchain/pool/BTC.BTC/liquidity_providers
+asserts:
+  - .|length == 1
+  - .[0].units == "200000000"
+  - .[0].pending_asset == "0"
+  - .[0].pending_rune == "0"

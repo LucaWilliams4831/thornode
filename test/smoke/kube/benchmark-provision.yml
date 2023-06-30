@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: benchmark-provision
+spec:
+  backoffLimit: 0
+  template:
+    spec:
+      containers:
+      - name: heimdall
+        image: registry.gitlab.com/thorchain/heimdall
+        imagePullPolicy: Always
+        env:
+          - name: LOGLEVEL
+            value: INFO
+        command:
+          - python
+          - scripts/benchmark.py
+          - --tx-type=add
+          - --thorchain=http://thor-api:1317
+          - --thorchain-websocket=ws://thor-daemon:26657/websocket
+          - --binance=http://binance-daemon:26657
+          - --num=NUM
+      restartPolicy: Never

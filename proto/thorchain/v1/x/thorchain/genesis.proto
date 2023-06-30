@@ -1,0 +1,56 @@
+syntax = "proto3";
+package thorchain;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain";
+
+import "thorchain/v1/x/thorchain/types/type_pool.proto";
+import "thorchain/v1/x/thorchain/types/type_chain_contract.proto";
+import "thorchain/v1/x/thorchain/types/type_network_fee.proto";
+import "thorchain/v1/x/thorchain/types/msg_swap.proto";
+import "thorchain/v1/x/thorchain/types/type_network.proto";
+import "thorchain/v1/x/thorchain/types/type_pol.proto";
+import "thorchain/v1/x/thorchain/types/type_reserve_contributor.proto";
+import "thorchain/v1/x/thorchain/types/type_vault.proto";
+import "thorchain/v1/x/thorchain/types/type_tx_out.proto";
+import "thorchain/v1/x/thorchain/types/type_node_account.proto";
+import "thorchain/v1/x/thorchain/types/type_observed_tx.proto";
+import "thorchain/v1/x/thorchain/types/type_liquidity_provider.proto";
+import "thorchain/v1/x/thorchain/types/type_thorname.proto";
+import "thorchain/v1/x/thorchain/types/type_loan.proto";
+import "gogoproto/gogo.proto";
+
+message lastChainHeight {
+  string chain = 1;
+  int64 height = 2;
+}
+
+message mimir{
+  string key = 1;
+  int64 value = 2;
+}
+message GenesisState {
+  repeated types.Pool pools = 1 [(gogoproto.nullable) = false];
+  repeated types.LiquidityProvider liquidity_providers = 2 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/x/thorchain/types.LiquidityProviders", (gogoproto.nullable) = false];
+  repeated types.ObservedTxVoter observed_tx_in_voters = 3 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/x/thorchain/types.ObservedTxVoters", (gogoproto.nullable) = false];
+  repeated types.ObservedTxVoter observed_tx_out_voters = 4 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/x/thorchain/types.ObservedTxVoters", (gogoproto.nullable) = false];
+  repeated types.TxOut tx_outs = 5 [(gogoproto.nullable) = false];
+  repeated types.NodeAccount node_accounts = 6 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/x/thorchain/types.NodeAccounts", (gogoproto.nullable) = false];
+  repeated types.Vault vaults = 7 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/x/thorchain/types.Vaults", (gogoproto.nullable) = false];
+  uint64 reserve = 8;
+  reserved 9;
+  int64 last_signed_height = 10;
+  repeated lastChainHeight last_chain_heights = 11 [(gogoproto.nullable) = false];
+  repeated types.ReserveContributor reserve_contributors = 12 [(gogoproto.castrepeated) = "gitlab.com/thorchain/thornode/x/thorchain/types.ReserveContributors", (gogoproto.nullable) = false];
+  types.Network network = 13 [(gogoproto.nullable) = false];
+  reserved 14,15,16,17,18;
+  repeated types.MsgSwap msg_swaps = 19 [(gogoproto.nullable) = false];
+  repeated types.NetworkFee network_fees = 20 [(gogoproto.nullable) = false];
+  reserved 21;
+  repeated types.ChainContract chain_contracts = 22 [(gogoproto.nullable) = false];
+  repeated types.THORName THORNames = 23 [(gogoproto.nullable) = false];
+  repeated mimir mimirs = 24 [(gogoproto.nullable) = false];
+  int64 store_version = 25;
+  repeated types.BondProviders bond_providers = 26 [(gogoproto.nullable) = false];
+  types.ProtocolOwnedLiquidity POL = 27 [(gogoproto.nullable) = false];
+  repeated types.Loan loans = 28 [(gogoproto.nullable) = false];
+}

@@ -1,0 +1,11 @@
+{
+  "name": "test1",
+  "expire_block_height": 10000,
+  "owner": "tthor1tdfqy34uptx207scymqsy4k5uzfmry5sf7z3dw",
+  "aliases": [
+    {
+      "chain": "THOR",
+      "address": "tthor1tdfqy34uptx207scymqsy4k5uzfmry5sf7z3dw"
+    }
+  ]
+}

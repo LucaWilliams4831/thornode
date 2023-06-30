@@ -1,0 +1,16 @@
+{
+  "keygen_block": {
+    "height": 1718,
+    "keygens": [
+      {
+        "id": "FEDA8BEDB84117C3EF6BEDA1A2639C11D73724AD0E85268E86CADEA13089E400",
+        "type": "AsgardKeygen",
+        "members": [
+          "tthorpub1addwnpepq2kdyjkm6y9aa3kxl8wfaverka6pvkek2ygrmhx6sj3ec6h0fegws6fcmjl",
+          "tthorpub1addwnpepqt7qug8vk9r3saw8n4r803ydj2g3dqwx0mvq5akhnze86fc536xcycgtrnv"
+        ]
+      }
+    ]
+  },
+  "signature": "Jn7IXzc5Vzf9EjJ67Bw4KnPIg1vwlIJ4fYo5209NNKo0KOdq47V8iUclcsHRYXuVDnc1Ph3FUWPKfXqfeRgJag=="
+}

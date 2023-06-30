@@ -1,0 +1,126 @@
+{
+  "name": "Testnet Token List",
+  "logoURI": "ipfs://QmaypvtnoXGQo4gSGHjgXaMUY98hf2FotQRfXgdLL4jo4i",
+  "keywords": ["testnet"],
+  "tags": {},
+  "timestamp": "2020-09-01T00:00:00+00:00",
+  "tokens": [
+    {
+      "chainId": 4,
+      "address": "0x8E3f9E9b5B26AAaE9d31364d2a8e8a9dd2BE3B82",
+      "symbol": "TKN18",
+      "name": "Test token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0xd601c6A3a36721320573885A8d8420746dA3d7A0",
+      "symbol": "RUNE",
+      "name": "Test RUNE token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x4d704dda8099305ee9803f02343129bf6ba55ff1",
+      "symbol": "RUNE",
+      "name": "Test RUNE token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0xA3910454bF2Cb59b8B3a401589A3bAcC5cA42306",
+      "symbol": "USDT",
+      "name": "ToxicTether",
+      "decimals": 6,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x6f67873ebc41ed88B08A9265Bd16480f819e4348",
+      "symbol": "USDT",
+      "name": "ToxicTether",
+      "decimals": 6,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x6cA13a4ab78dd7D657226b155873A04DB929A3A4",
+      "symbol": "UST",
+      "name": "Wrapped UST Token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x8626DB1a4f9f3e1002EEB9a4f3c6d391436Ffc23",
+      "symbol": "XRUNE",
+      "name": "XRUNE Token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x3b7FA4dd21c6f9BA3ca375217EAD7CAb9D6bF483",
+      "symbol": "TKN",
+      "name": "Test token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x52C84043CD9c865236f11d9Fc9F56aa003c1f922",
+      "symbol": "TKN",
+      "name": "Test token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x983e2cC84Bb8eA7b75685F285A28Bde2b4D5aCDA",
+      "symbol": "TKN",
+      "name": "Test token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0xe247EFF2915Cb56Ec7a4DB3aE7b923326752E92C",
+      "symbol": "THOR",
+      "name": "THORSwap token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x73d6e26896981798526b6ead48d0fab76e205974",
+      "symbol": "TGT",
+      "name": "THORWallet Governance Token",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "chainId": 4,
+      "address": "0x0a44986b70527154e9F4290eC14e5f0D1C861823",
+      "symbol": "WETH",
+      "name": "WETH token for test",
+      "decimals": 18,
+      "tags": []
+    },
+    {
+      "name": "",
+      "symbol": "USDC",
+      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "chainId": 56,
+      "decimals": 18,
+      "logoURI": ""
+    }
+  ],
+  "version": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0
+  }
+}

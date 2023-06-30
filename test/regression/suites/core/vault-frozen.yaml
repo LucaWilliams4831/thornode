@@ -1,0 +1,76 @@
+{{ template "default-state.yaml" }}
+---
+{{ template "btc-eth-pool-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: tx-tss-keysign
+signer: {{ addr_thor_dog }}
+pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4"
+id: "d45b09c9f7bbc5735d4dafbce1c5404a5330914e4b785ef3f9516d876a00bd5c"
+memo: "blah blah"
+coins:
+  - amount: "10000000000"
+    asset: "BTC.BTC"
+blame:
+  round: "SignRound7Message"
+  fail_reason: "yolo"
+  blame_nodes:
+    - pubkey: {{ pubkey_dog }}
+height: 100
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: ensure vault is frozen
+endpoint: http://localhost:1317/thorchain/vault/tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4
+asserts:
+  - .frozen|length == 1
+  - .frozen[0] == "BTC"
+---
+type: tx-deposit
+signer: {{ addr_thor_fox }}
+coins:
+  - amount: "10000000000"
+    asset: "rune"
+memo: "=:BTC.BTC:{{ addr_btc_fox }}"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: remove me
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .[0].in_hash == "4D3C0AF82E11A11B54BD02B70DA05CEA6F8C6292547486B4C73934C28F93B651" 
+---
+type: tx-observed-out
+signer: {{ addr_thor_dog }}
+txs:
+- tx:
+    id: '4D3C0AF82E11A11B54BD02B70DA05CEA6F8C6292547486B4C73934C28F93B651'
+    chain: BTC
+    from_address: {{ addr_btc_dog }}
+    to_address: {{ addr_btc_fox }}
+    coins:
+      - amount: "8250390"
+        asset: "BTC.BTC"
+        decimals: 8
+    gas:
+      - amount: "10500"
+        asset: "BTC.BTC"
+    memo: "OUT:4D3C0AF82E11A11B54BD02B70DA05CEA6F8C6292547486B4C73934C28F93B651"
+  block_height: 2
+  finalise_height: 2
+  observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: ensure vault is NOT frozen
+endpoint: http://localhost:1317/thorchain/vault/tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4
+asserts:
+  - has("frozen")|not

@@ -1,0 +1,4 @@
+# TODO: Fix handler when EnableDerivedAssets=1 for following cases (currently fail).
+# - Open loan with tor as the target asset
+# - Open loan with a derived asset as the target asset
+# - Verify that open with derived asset collateral fails

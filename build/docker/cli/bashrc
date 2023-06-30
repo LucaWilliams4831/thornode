@@ -1,0 +1,7 @@
+export TX_FLAGS='--node http://thornode:26657 --keyring-backend file --keyring-dir /cli/keys --chain-id thorchain'
+
+cat <<EOF
+>>> THORNode Mocknet CLI <<<
+1. The passphrase for all keys is "password"
+2. The key named "dog" is an admin MIMIR key for the mocknet cluster
+EOF

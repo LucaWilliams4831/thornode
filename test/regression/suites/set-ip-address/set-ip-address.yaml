@@ -1,0 +1,17 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: tx-set-ip-address
+signer: {{ addr_thor_dog }}
+ip_address: "10.0.0.1"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: ip address should be stored
+endpoint: http://localhost:1317/thorchain/node/{{ addr_thor_dog }}
+asserts:
+- .ip_address == "10.0.0.1"

@@ -1,0 +1,60 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+########################################################################################
+# set max supply to 50k RUNE (default state)
+########################################################################################
+type: tx-mimir
+key: MaxRuneSupply
+value: 50000000000000
+signer: {{ addr_thor_dog }}
+---
+type: create-blocks
+count: 1
+---
+########################################################################################
+# verify reserve supply
+########################################################################################
+type: check
+description: mint over max should have halted
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_module_reserve }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 35000000000000
+---
+########################################################################################
+# trigger upgrade to mint rune
+########################################################################################
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+- tx:
+    id: '{{ observe_txid 1 }}'
+    chain: BNB
+    from_address: {{ addr_bnb_cat }}
+    to_address: {{ addr_bnb_dog }}
+    coins:
+      - amount: "100000"
+        asset: "BNB.RUNE-B1A"
+    gas:
+      - amount: "10000"
+        asset: "BNB.BNB"
+    memo: "SWITCH:{{ addr_thor_cat }}"
+  block_height: 1
+  finalise_height: 1
+  observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+########################################################################################
+# verify reserve was reduced
+########################################################################################
+type: check
+description: mint over max should have halted
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_module_reserve }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 34999999900000

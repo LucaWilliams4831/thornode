@@ -1,0 +1,16 @@
+[
+  {
+    "balance_rune": "290644564927064",
+    "balance_asset": "820002",
+    "asset": "ETH.ETH",
+    "pool_units": "200000000000000",
+    "status": "Available"
+  },
+  {
+    "balance_rune": "200000000000000",
+    "balance_asset": "1000000",
+    "asset": "ETH.TKN-0X3B7FA4DD21C6F9BA3CA375217EAD7CAB9D6BF483",
+    "pool_units": "200000000000000",
+    "status": "Available"
+  }
+]

@@ -1,0 +1,119 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: tx-mimir
+key: KillSwitchStart
+value: 4
+signer: {{ addr_thor_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: tx-mimir
+key: KillSwitchDuration
+value: 6
+signer: {{ addr_thor_dog }}
+---
+type: create-blocks
+count: 1
+---
+########################################################################################
+# trigger upgrade to mint rune
+########################################################################################
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 1 }}"
+      chain: BNB
+      from_address: {{ addr_bnb_pig }}
+      to_address: {{ addr_bnb_dog }}
+      coins:
+        - amount: "100000000"
+          asset: "BNB.RUNE-B1A"
+      gas:
+        - amount: "10000"
+          asset: "BNB.BNB"
+      memo: "SWITCH:{{ addr_thor_pig }}"
+    block_height: 1
+    finalise_height: 1
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: pig account should hold full switch balance
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_pig }}
+asserts:
+  - .balances[0].amount|tonumber == 100000000
+---
+########################################################################################
+# 3 blocks later they should only receive half
+########################################################################################
+type: create-blocks
+count: 2
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 2 }}"
+      chain: BNB
+      from_address: {{ addr_bnb_pig }}
+      to_address: {{ addr_bnb_dog }}
+      coins:
+        - amount: "100000000"
+          asset: "BNB.RUNE-B1A"
+      gas:
+        - amount: "10000"
+          asset: "BNB.BNB"
+      memo: "SWITCH:{{ addr_thor_pig }}"
+    block_height: 2
+    finalise_height: 2
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: pig account should have received half the switch
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_pig }}
+asserts:
+  - .balances[0].amount|tonumber == 150000000
+---
+########################################################################################
+# 3 blocks later they should receive none
+########################################################################################
+type: create-blocks
+count: 2
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 3 }}"
+      chain: BNB
+      from_address: {{ addr_bnb_pig }}
+      to_address: {{ addr_bnb_dog }}
+      coins:
+        - amount: "100000000"
+          asset: "BNB.RUNE-B1A"
+      gas:
+        - amount: "10000"
+          asset: "BNB.BNB"
+      memo: "SWITCH:{{ addr_thor_pig }}"
+    block_height: 3
+    finalise_height: 3
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: pig account should have received no more rune after killswitch duration
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_pig }}
+asserts:
+  - .balances[0].amount|tonumber == 150000000

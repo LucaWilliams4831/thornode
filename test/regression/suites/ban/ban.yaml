@@ -1,0 +1,16 @@
+# TODO regression only has one node. if that node bans itself, blocks
+# cannot be produced. testing bans will always result in failures
+
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+#---
+## dog, the only node, bans themself
+#type: tx-ban
+#signer: {{ addr_thor_dog }}
+#node_address: {{ addr_thor_dog }}
+#---
+## this block fails since dog banned himself
+#type: create-blocks
+#count: 1

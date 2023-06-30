@@ -1,0 +1,12 @@
+{
+  "account": {
+    "@type": "/cosmos.auth.v1beta1.BaseAccount",
+    "accountNumber": "3530305",
+    "address": "cosmos10tjz4ave7znpctgd2rfu6v2r6zkeup2del6t7z",
+    "pubKey": {
+      "@type": "/cosmos.crypto.secp256k1.PubKey",
+      "key": "AnyuDVk4rHHTvELH8lX44QtU+zrURX8U6ybhoPFWOBsH"
+    },
+    "sequence": "3"
+  }
+}

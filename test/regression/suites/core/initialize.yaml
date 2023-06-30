@@ -1,0 +1,35 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: no pools should exist
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 0
+---
+type: check
+description: supply should be 500M
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/supply
+asserts:
+  - .supply[]|select(.denom == "rune")|.amount|tonumber == 500000e8
+---
+type: check
+description: inbound addresses should exist for all chains
+endpoint: http://localhost:1317/thorchain/inbound_addresses
+asserts:
+  - .|length == 10
+  # all addresses should be for the dog mnemonic
+  - .[]|select(.chain == "AVAX")|.address == "{{ addr_avax_dog }}"
+  - .[]|select(.chain == "BCH")|.address == "{{ addr_bch_dog }}"
+  - .[]|select(.chain == "BNB")|.address == "{{ addr_bnb_dog }}"
+  - .[]|select(.chain == "BTC")|.address == "{{ addr_btc_dog }}"
+  - .[]|select(.chain == "DOGE")|.address == "{{ addr_doge_dog }}"
+  - .[]|select(.chain == "ETH")|.address == "{{ addr_eth_dog }}"
+  - .[]|select(.chain == "GAIA")|.address == "{{ addr_gaia_dog }}"
+  - .[]|select(.chain == "LTC")|.address == "{{ addr_ltc_dog }}"
+  - .[]|select(.chain == "TERRA")|.address == "{{ addr_terra_dog }}"
+  - .[]|select(.chain == "BSC")|.address == "{{ addr_bsc_dog }}"
+  # the pubkey on all inbound addresses should be the dog public key
+  - '[.[]|select(.pub_key == "{{ pubkey_dog }}")]|length == 10'

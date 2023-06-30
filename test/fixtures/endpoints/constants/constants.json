@@ -1,0 +1,34 @@
+{
+  "int_64_values": {
+    "BlocksPerYear": 6311390,
+    "DesiredValidatorSet": 12,
+    "DoubleSignMaxAge": 24,
+    "EmissionCurve": 6,
+    "FailKeysignSlashPoints": 2,
+    "FailKeygenSlashPoints": 720,
+    "FundMigrationInterval": 10,
+    "LackOfObservationPenalty": 2,
+    "MinimumBondInRune": 100000000,
+    "MinimumNodesForBFT": 4,
+    "MinimumNodesForYggdrasil": 6,
+    "PoolCycle": 50000,
+    "ObserveSlashPoints": 1,
+    "ChurnInterval": 60,
+    "ChurnRetryInterval": 720,
+    "SigningTransactionPeriod": 300,
+    "LiquidityLockUpBlocks": 0,
+    "OutboundTransactionFee": 100000000,
+    "ChurnInNumberBeforeFull": 2,
+    "ChurnNumberAfterFull": 1,
+    "ChurnOutNumberBeforeFull": 1,
+    "WhiteListGasAsset": 1000,
+    "YggFundLimit": 50,
+    "ObservationDelayFlexibility": 5
+  },
+  "bool_values": {
+    "StrictBondLiquidityRatio": false
+  },
+  "string_values": {
+    "DefaultPoolStatus": "Available"
+  }
+}

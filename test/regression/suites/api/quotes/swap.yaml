@@ -1,0 +1,491 @@
+{{ template "default-state.yaml" }}
+---
+{{ template "btc-eth-pool-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: eth and btc pools should exist
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 2
+---
+########################################################################################
+# quote and swap rune to btc
+########################################################################################
+type: check
+description: check swap quote
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: THOR.RUNE
+  to_asset: BTC.BTC
+  amount: 1000000000
+  destination: {{ addr_btc_fox }}
+asserts:
+  - .expected_amount_out|tonumber == 966290
+  - .memo == "=:BTC.BTC:{{ addr_btc_fox }}"
+  - .inbound_address == null
+  - .recommended_min_amount_in == "56000300"
+---
+type: tx-deposit
+signer: {{ addr_thor_fox }}
+coins:
+  - amount: "1000000000"
+    asset: "rune"
+memo: "=:BTC.BTC:{{ addr_btc_fox }}"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: rune balance should decrease for swap
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2498998000000
+---
+type: check
+description: outbound should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 1
+  - .[0]|.in_hash == "{{ native_txid -1 }}"
+---
+type: tx-observed-out
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 1 }}"
+      chain: BTC
+      from_address: {{ addr_btc_dog }}
+      to_address: {{ addr_btc_fox }}
+      coins:
+        - amount: "966290"
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10500"
+          asset: "BTC.BTC"
+      memo: "OUT:{{ native_txid -1 }}"
+    block_height: 2
+    finalise_height: 2
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: outbound should have been observed
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+########################################################################################
+# quote and swap btc to rune
+########################################################################################
+type: check
+description: check swap quote
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: BTC.BTC
+  to_asset: THOR.RUNE
+  amount: 5000000
+  destination: {{ addr_thor_fox }}
+asserts:
+  - .expected_amount_out|tonumber == 4619255704
+  - .memo == "=:THOR.RUNE:{{ addr_thor_fox }}"
+  - .inbound_address == "{{ addr_btc_dog }}"
+  - .recommended_min_amount_in == "56000"
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 2 }}"
+      chain: BTC
+      from_address: {{ addr_btc_fox }}
+      to_address: {{ addr_btc_dog }}
+      coins:
+        - amount: "5000000"
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10500"
+          asset: "BTC.BTC"
+      memo: "=:THOR.RUNE:{{ addr_thor_fox }}"
+    block_height: 3
+    finalise_height: 3
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: rune balance should increase after swap
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2503617255704
+---
+########################################################################################
+# quote and swap rune to btc synth
+########################################################################################
+type: check
+description: check swap quote
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: THOR.RUNE
+  to_asset: BTC/BTC
+  amount: 1000000000
+asserts:
+  - .expected_amount_out|tonumber == 1066176
+  - .recommended_min_amount_in == "4000000"
+---
+type: tx-deposit
+signer: {{ addr_thor_fox }}
+coins:
+  - amount: "1000000000"
+    asset: "rune"
+memo: "=:BTC/BTC"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: account should have spent rune and received synth btc
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 2
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2502615255704
+  - .balances[]|select(.denom == "btc/btc")|.amount|tonumber == 1066176
+---
+########################################################################################
+# quote and swap rune to btc synth with tolerance
+########################################################################################
+type: check
+description: unsatisfied tolerance should return error
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: THOR.RUNE
+  to_asset: BTC/BTC
+  amount: 100000000
+  tolerance_bps: 200
+asserts:
+  - .error|length > 0
+---
+type: check
+description: check swap quote with valid tolerance
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: THOR.RUNE
+  to_asset: BTC/BTC
+  amount: 100000000
+  tolerance_bps: 300
+asserts:
+  - .expected_amount_out|tonumber == 104590
+  - .recommended_min_amount_in == "4000000"
+---
+type: tx-deposit
+signer: {{ addr_thor_fox }}
+coins:
+  - amount: "100000000"
+    asset: "rune"
+memo: "=:BTC/BTC"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: account should have spent rune and received synth btc
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 2
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2502513255704
+  - .balances[]|select(.denom == "btc/btc")|.amount|tonumber == 1170766
+---
+########################################################################################
+# quote and swap rune to btc with tolerance and affiliate
+########################################################################################
+type: check
+description: affiliate over max should return error
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: THOR.RUNE
+  to_asset: BTC.BTC
+  amount: 1000000000
+  tolerance_bps: 1000
+  affiliate: {{ addr_thor_pig }}
+  affiliate_bps: 5000
+asserts:
+  - .error|test("more than 1000")
+---
+type: check
+description: check swap quote with valid tolerance and affiliate
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: THOR.RUNE
+  to_asset: BTC.BTC
+  amount: 1000000000
+  tolerance_bps: 1000
+  destination: {{ addr_btc_fox }}
+  affiliate: {{ addr_thor_pig }}
+  affiliate_bps: 500
+asserts:
+  - .memo == "=:BTC.BTC:{{ addr_btc_fox }}:912514:{{ addr_thor_pig }}:500"
+  - .expected_amount_out|tonumber == 980425
+---
+type: tx-deposit
+signer: {{ addr_thor_fox }}
+coins:
+  - amount: "1000000000"
+    asset: "rune"
+memo: "=:BTC.BTC:{{ addr_btc_fox }}:912514:{{ addr_thor_pig }}:500"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: outbound should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 1
+  - .[0]|.in_hash == "{{ native_txid -1 }}"
+---
+type: tx-observed-out
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 3 }}"
+      chain: BTC
+      from_address: {{ addr_btc_dog }}
+      to_address: {{ addr_btc_fox }}
+      coins:
+        - amount: "980425"
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10500"
+          asset: "BTC.BTC"
+      memo: "OUT:{{ native_txid -1 }}"
+    block_height: 4
+    finalise_height: 4
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: outbound should have been observed
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+type: check
+description: affiliate should have more rune after swap
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_pig }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 50000000
+---
+########################################################################################
+# quote and swap eth to btc with tolerance and affiliate
+########################################################################################
+type: check
+description: should not be able to swap btc to eth with long memo
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: BTC.BTC
+  to_asset: ETH.ETH
+  amount: 5000000
+  tolerance_bps: 1000
+  affiliate: {{ addr_thor_pig }}
+  affiliate_bps: 5000
+asserts:
+  - .error|test("memo too long")
+---
+type: check
+description: check swap quote from eth to btc with valid tolerance and affiliate
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: ETH.ETH
+  to_asset: BTC.BTC
+  amount: 10000000
+  tolerance_bps: 1000
+  affiliate: {{ addr_thor_pig }}
+  affiliate_bps: 500
+  destination: {{ addr_btc_fox }}
+asserts:
+  - .memo == "=:BTC.BTC:{{ addr_btc_fox }}:895131:{{ addr_thor_pig }}:500"
+  - .expected_amount_out|tonumber == 943729
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 4 }}"
+      chain: ETH
+      from_address: {{ addr_eth_fox }}
+      to_address: {{ addr_eth_dog }}
+      coins:
+        - amount: "10000000"
+          asset: "ETH.ETH"
+          decimals: 8
+      gas:
+        - amount: "100000"
+          asset: "ETH.ETH"
+      memo: "=:BTC.BTC:{{ addr_btc_fox }}:895131:{{ addr_thor_pig }}:500"
+    block_height: 5
+    finalise_height: 5
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: outbound should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 1
+  - .[0]|.in_hash == "{{ observe_txid 4 }}"
+---
+type: tx-observed-out
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 5 }}"
+      chain: BTC
+      from_address: {{ addr_btc_dog }}
+      to_address: {{ addr_btc_fox }}
+      coins:
+        - amount: "943729"
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10500"
+          asset: "BTC.BTC"
+      memo: "OUT:{{ observe_txid 4 }}"
+    block_height: 6
+    finalise_height: 6
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: outbound should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+########################################################################################
+# quote and swap eth to rune with tolerance and thorname affiliate
+########################################################################################
+type: tx-send
+from_address: {{ addr_thor_fox }}
+to_address: {{ addr_thor_pig }}
+amount:
+  - amount: "1000000001"
+    denom: "rune"
+---
+type: tx-deposit
+signer: {{ addr_thor_pig }}
+coins:
+  - amount: "1000000001"
+    asset: "rune"
+memo: "~:xx:THOR:{{ addr_thor_pig }}"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: thorname "xx" should be registered
+endpoint: http://localhost:1317/thorchain/thorname/xx
+asserts:
+  - .aliases[0].address == "{{ addr_thor_pig }}"
+  - .owner == "{{ addr_thor_pig }}"
+---
+type: check
+description: check swap quote from eth to rune with valid tolerance and thorname affiliate
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: ETH.ETH
+  to_asset: THOR.RUNE
+  amount: 10000000
+  tolerance_bps: 1000
+  affiliate: xx
+  affiliate_bps: 500
+  destination: {{ addr_thor_fox }}
+asserts:
+  - .memo == "=:THOR.RUNE:{{ addr_thor_fox }}:838252262:xx:500"
+  - .expected_amount_out|tonumber == 912114319
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 6 }}"
+      chain: ETH
+      from_address: {{ addr_eth_fox }}
+      to_address: {{ addr_eth_dog }}
+      coins:
+        - amount: "10000000"
+          asset: "ETH.ETH"
+          decimals: 8
+      gas:
+        - amount: "100000"
+          asset: "ETH.ETH"
+      memo: "=:THOR.RUNE:{{ addr_thor_fox }}:838252262:xx:500"
+    block_height: 7
+    finalise_height: 7
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: check
+description: establish balance before swap
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 2
+  - .balances[]|select(.denom == "btc/btc")|.amount|tonumber == 1170766
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2500509255703
+---
+type: check
+description: establish affiliate balance before swap
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_pig }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 95019968
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: account should have more rune after swap
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 2
+  - .balances[]|select(.denom == "btc/btc")|.amount|tonumber == 1170766
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2501421370022
+---
+type: check
+description: affiliate should have more rune after swap
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_pig }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 141088304
+---
+########################################################################################
+# quote btc/btc to rune when from_address doesn't have enough btc/btc - quote should still be returned
+########################################################################################
+type: check
+description: quote should be returned even with insufficient synth balance on from_address. inbound address should be empty for synth swaps
+endpoint: http://localhost:1317/thorchain/quote/swap
+params:
+  from_asset: BTC/BTC
+  from_address: {{ addr_thor_fox }}
+  to_asset: THOR.RUNE
+  amount: 10000000
+  destination: {{ addr_thor_fox }}
+asserts:
+  - .memo == "=:THOR.RUNE:{{ addr_thor_fox }}"
+  - .inbound_address == null
+  - .recommended_min_amount_in == "4110"

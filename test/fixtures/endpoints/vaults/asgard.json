@@ -1,0 +1,345 @@
+[
+  {
+    "block_height": 212226,
+    "pub_key": "tthorpub1addwnpepqfe6kxcaq2jl4zyzdfvmpmt68lz2uvnutj20yy8sskkzvm5n94cgsavqhnr",
+    "coins": [
+      {
+        "asset": "BNB.BNB",
+        "amount": "0"
+      },
+      {
+        "asset": "ETH.ETH",
+        "amount": "38470615"
+      },
+      {
+        "asset": "LTC.LTC",
+        "amount": "0"
+      },
+      {
+        "asset": "BTC.BTC",
+        "amount": "0"
+      },
+      {
+        "asset": "BCH.BCH",
+        "amount": "0"
+      },
+      {
+        "asset": "BNB.BUSD-BAF",
+        "amount": "0"
+      },
+      {
+        "asset": "ETH.TKN8-0X242AD49DACD38AC23CAF2CCC118482714206BED4",
+        "amount": "30426926"
+      },
+      {
+        "asset": "ETH.USDT-0X62E273709DA575835C7F6AEF4A31140CA5B1D190",
+        "amount": "3586418300",
+        "decimals": 6
+      },
+      {
+        "asset": "BNB.RUNE-67C",
+        "amount": "2933789564503"
+      }
+    ],
+    "type": "AsgardVault",
+    "status": "RetiringVault",
+    "status_since": 258550,
+    "membership": [
+      "tthorpub1addwnpepq085c2weq8505afzzr7uqach5ftdwn2n0kfldvdu9e2yx4cksjgkqq7zale",
+      "tthorpub1addwnpepqd07xkp4mc350dtexzv8vtqs6gz4phxa7hts4px2gwxtygxh3v9xxv2g282",
+      "tthorpub1addwnpepqt8j3lmacayajv4uwey7mrzf87zwj8jmhd3922j9dhjm79tcjtm52pwj7rq",
+      "tthorpub1addwnpepqwuxxttdzav8ukwdpq5za69tfmq7ax99tjnzr7f7w94h6hpvdsr267ds6gw"
+    ],
+    "chains": ["BCH", "BNB", "BTC", "ETH", "LTC", "THOR", "AVAX"],
+    "inbound_tx_count": 120,
+    "outbound_tx_count": 94,
+    "pending_tx_block_heights": [267190, 267190, 267190],
+    "routers": [
+      {
+        "chain": "ETH",
+        "router": "0x9d496De78837f5a2bA64Cb40E62c19FBcB67f55a"
+      }
+    ],
+    "addresses": [
+      {
+        "chain": "BCH",
+        "address": "qzez2c8anauy73ff4x9nyylh20kn55mqju86jvk9z0"
+      },
+      {
+        "chain": "BNB",
+        "address": "tbnb1kgjkplvl0p8522df3vep8a6na5a9xcyh7qxduc"
+      },
+      {
+        "chain": "BTC",
+        "address": "tb1qkgjkplvl0p8522df3vep8a6na5a9xcyhwd4aze"
+      },
+      {
+        "chain": "ETH",
+        "address": "0x2b2376f47d46c5ce513cdf73c7d2e71bf3be8f53"
+      },
+      {
+        "chain": "AVAX",
+        "contract": "0x2b2376f47d46c5ce513cdf73c7d2e71bf3be8f53"
+      },
+      {
+        "chain": "LTC",
+        "address": "tltc1qkgjkplvl0p8522df3vep8a6na5a9xcyhh9hrjs"
+      },
+      {
+        "chain": "THOR",
+        "address": "tthor1kgjkplvl0p8522df3vep8a6na5a9xcyhspcw3a"
+      }
+    ]
+  },
+  {
+    "block_height": 212227,
+    "pub_key": "tthorpub1addwnpepqfpc0xnyxsk2g0xddfmecam8fzj2cn9vjxek0dmar5e6m07l0ayrqsz9kwv",
+    "coins": [
+      {
+        "asset": "BNB.BNB",
+        "amount": "0"
+      },
+      {
+        "asset": "BNB.BUSD-BAF",
+        "amount": "0"
+      },
+      {
+        "asset": "ETH.ETH",
+        "amount": "0"
+      },
+      {
+        "asset": "ETH.TKN8-0X242AD49DACD38AC23CAF2CCC118482714206BED4",
+        "amount": "685771677"
+      },
+      {
+        "asset": "ETH.USDT-0X62E273709DA575835C7F6AEF4A31140CA5B1D190",
+        "amount": "4795070300",
+        "decimals": 6
+      },
+      {
+        "asset": "LTC.LTC",
+        "amount": "0"
+      },
+      {
+        "asset": "BTC.BTC",
+        "amount": "0"
+      },
+      {
+        "asset": "BCH.BCH",
+        "amount": "0"
+      },
+      {
+        "asset": "BNB.RUNE-67C",
+        "amount": "2928926947019"
+      }
+    ],
+    "type": "AsgardVault",
+    "status": "RetiringVault",
+    "status_since": 258550,
+    "membership": [
+      "tthorpub1addwnpepq2dsxnjxp7h3n86wrph58x0uex8kxdte6kuxhq2tqevrfq486e865xgvq7x",
+      "tthorpub1addwnpepqgjsdsjzsgf5hrtkzu85t6jzl0g48kd7wvex5ma5x2fr76f0x8lnxlvkqmz",
+      "tthorpub1addwnpepqgncv6xym57498e349x9v77wdq624hlr859hlemdc3ed5tsndcy2crjm6vv",
+      "tthorpub1addwnpepqv2plf6vrvu9lw57hkwl00n7u9c9evmzxsnnegm5tcstf2lp5en0wmmgwz3",
+      "tthorpub1addwnpepqvfxu5clq0cupuvep6gqr0yzylthu6hzqf6tlz52eu0gw9qwetv57e05puz"
+    ],
+    "chains": ["BCH", "BNB", "BTC", "ETH", "LTC", "THOR"],
+    "inbound_tx_count": 131,
+    "outbound_tx_count": 80,
+    "pending_tx_block_heights": [267190, 267190],
+    "routers": [
+      {
+        "chain": "ETH",
+        "router": "0x9d496De78837f5a2bA64Cb40E62c19FBcB67f55a"
+      }
+    ],
+    "addresses": [
+      {
+        "chain": "BCH",
+        "address": "qz6a0ulzagfr53alzhmjennlhw8k484e2s9qdzx2d9"
+      },
+      {
+        "chain": "BNB",
+        "address": "tbnb1khtl8ch2zgay00c47ukvulam3a4faw25pwkaje"
+      },
+      {
+        "chain": "BTC",
+        "address": "tb1qkhtl8ch2zgay00c47ukvulam3a4faw253r9dvc"
+      },
+      {
+        "chain": "ETH",
+        "address": "0xe7ed9e3f6ea1c99b70a223d6d0b4dad161e1dcac"
+      },
+      {
+        "chain": "LTC",
+        "address": "tltc1qkhtl8ch2zgay00c47ukvulam3a4faw25gt8nu3"
+      },
+      {
+        "chain": "THOR",
+        "address": "tthor1khtl8ch2zgay00c47ukvulam3a4faw2500g7lu"
+      }
+    ]
+  },
+  {
+    "block_height": 258549,
+    "pub_key": "tthorpub1addwnpepqdqs8g3qphedpy3uzjvdyfgjpts88thjxxj37c2cs7lwa0rny0hevc83nu6",
+    "coins": [
+      {
+        "asset": "BNB.BNB",
+        "amount": "1016923794"
+      },
+      {
+        "asset": "BCH.BCH",
+        "amount": "457872726"
+      },
+      {
+        "asset": "LTC.LTC",
+        "amount": "1342500441"
+      },
+      {
+        "asset": "BTC.BTC",
+        "amount": "47419848"
+      },
+      {
+        "asset": "ETH.ETH",
+        "amount": "217877433"
+      }
+    ],
+    "type": "AsgardVault",
+    "status": "ActiveVault",
+    "status_since": 258550,
+    "membership": [
+      "tthorpub1addwnpepq27nhxu3gy72lfhy0dstvtdsp90qjjvq9jczc6hwknhxrz2kgjas7cwvfh0",
+      "tthorpub1addwnpepq2dsxnjxp7h3n86wrph58x0uex8kxdte6kuxhq2tqevrfq486e865xgvq7x",
+      "tthorpub1addwnpepqgncv6xym57498e349x9v77wdq624hlr859hlemdc3ed5tsndcy2crjm6vv",
+      "tthorpub1addwnpepqv2plf6vrvu9lw57hkwl00n7u9c9evmzxsnnegm5tcstf2lp5en0wmmgwz3",
+      "tthorpub1addwnpepqwuxxttdzav8ukwdpq5za69tfmq7ax99tjnzr7f7w94h6hpvdsr267ds6gw"
+    ],
+    "chains": ["BCH", "BNB", "BTC", "ETH", "LTC", "THOR"],
+    "inbound_tx_count": 10,
+    "routers": [
+      {
+        "chain": "ETH",
+        "router": "0x9d496De78837f5a2bA64Cb40E62c19FBcB67f55a"
+      }
+    ],
+    "addresses": [
+      {
+        "chain": "BCH",
+        "address": "qrnc5p8enjzh3ulzc2tkqstarmycvjq0ty8hd97ejn"
+      },
+      {
+        "chain": "BNB",
+        "address": "tbnb1u79qf7vus4u08ckzjasyzlg7exrysr6e3hn39m"
+      },
+      {
+        "chain": "BTC",
+        "address": "tb1qu79qf7vus4u08ckzjasyzlg7exrysr6ep6qpm6"
+      },
+      {
+        "chain": "ETH",
+        "address": "0xcec1a33f32038c6809cae26b624d202450b13634"
+      },
+      {
+        "chain": "LTC",
+        "address": "tltc1qu79qf7vus4u08ckzjasyzlg7exrysr6ecjzltn"
+      },
+      {
+        "chain": "THOR",
+        "address": "tthor1u79qf7vus4u08ckzjasyzlg7exrysr6elkdjg7"
+      }
+    ]
+  },
+  {
+    "block_height": 258550,
+    "pub_key": "tthorpub1addwnpepqgju00ejlv07ngmwdqzh5aq7uv8zstwfd5cn6wzv5fuj65jjrqxpvxfsya0",
+    "coins": [
+      {
+        "asset": "BNB.BNB",
+        "amount": "4702473977"
+      },
+      {
+        "asset": "BNB.BUSD-BAF",
+        "amount": "18841648081"
+      },
+      {
+        "asset": "BCH.BCH",
+        "amount": "1876554898"
+      },
+      {
+        "asset": "LTC.LTC",
+        "amount": "5519008994"
+      },
+      {
+        "asset": "BNB.RUNE-67C",
+        "amount": "1400000000000"
+      },
+      {
+        "asset": "ETH.ETH",
+        "amount": "251257440"
+      },
+      {
+        "asset": "ETH.USDT-0X62E273709DA575835C7F6AEF4A31140CA5B1D190",
+        "amount": "26541380300",
+        "decimals": 6
+      },
+      {
+        "asset": "ETH.TKN8-0X242AD49DACD38AC23CAF2CCC118482714206BED4",
+        "amount": "2267962237"
+      },
+      {
+        "asset": "BTC.BTC",
+        "amount": "197816655"
+      }
+    ],
+    "type": "AsgardVault",
+    "status": "ActiveVault",
+    "status_since": 258550,
+    "membership": [
+      "tthorpub1addwnpepqd07xkp4mc350dtexzv8vtqs6gz4phxa7hts4px2gwxtygxh3v9xxv2g282",
+      "tthorpub1addwnpepqgccwvkv0wkh3x9g7uwt472d0afl6kk8pgf70xqr4e4mmm92fa02jfh6p6f",
+      "tthorpub1addwnpepqt8j3lmacayajv4uwey7mrzf87zwj8jmhd3922j9dhjm79tcjtm52pwj7rq",
+      "tthorpub1addwnpepqv04qarz0n4ppcuthux9png363cepmg83ej2t2lphdjpzxgu5lhzvr93vqg",
+      "tthorpub1addwnpepqvfxu5clq0cupuvep6gqr0yzylthu6hzqf6tlz52eu0gw9qwetv57e05puz"
+    ],
+    "chains": ["BCH", "BNB", "BTC", "ETH", "LTC", "THOR", "AVAX"],
+    "inbound_tx_count": 94,
+    "outbound_tx_count": 6,
+    "routers": [
+      {
+        "chain": "ETH",
+        "router": "0x9d496De78837f5a2bA64Cb40E62c19FBcB67f55a"
+      }
+    ],
+    "addresses": [
+      {
+        "chain": "BCH",
+        "address": "qqeevp5dxrmqg3lulsfwzzjqfj906u0mav55gk7sd3"
+      },
+      {
+        "chain": "BNB",
+        "address": "tbnb1xwtqdrfs7czy0l8uztss5szv3t7hr7ltsg7sjx"
+      },
+      {
+        "chain": "BTC",
+        "address": "tb1qxwtqdrfs7czy0l8uztss5szv3t7hr7ltq9dqv8"
+      },
+      {
+        "chain": "ETH",
+        "address": "0x73293276442cbcf843484476497eb83d2ea13684"
+      },
+      {
+        "chain": "AVAX",
+        "address": "0x73293276442cbcf843484476497eb83d2ea13684"
+      },
+      {
+        "chain": "LTC",
+        "address": "tltc1qxwtqdrfs7czy0l8uztss5szv3t7hr7lted07uw"
+      },
+      {
+        "chain": "THOR",
+        "address": "tthor1xwtqdrfs7czy0l8uztss5szv3t7hr7lt7fqnlr"
+      }
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+syntax = "proto3";
+package types;
+
+option go_package = "gitlab.com/thorchain/thornode/x/thorchain/types";
+
+import "thorchain/v1/common/common.proto";
+import "gogoproto/gogo.proto";
+
+message MsgLoanOpen {
+  string owner = 1 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  common.Asset collateral_asset = 2 [(gogoproto.nullable) = false];
+  string collateral_amount = 3 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string target_address = 4 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  common.Asset target_asset = 5 [(gogoproto.nullable) = false];
+  string min_out = 6 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string affiliate_address = 7 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  string affiliate_basis_points = 8 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  string aggregator = 9;
+  string aggregator_target_address = 10;
+  string aggregator_target_limit = 11 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  bytes signer = 12  [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
+
+message MsgLoanRepayment {
+  string owner = 1 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+  common.Asset collateral_asset = 2 [(gogoproto.nullable) = false];
+  common.Coin coin = 3 [(gogoproto.nullable) = false];
+  string min_out = 4 [(gogoproto.customtype) = "github.com/cosmos/cosmos-sdk/types.Uint", (gogoproto.nullable) = false];
+  bytes signer = 5  [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string from = 6 [(gogoproto.casttype) = "gitlab.com/thorchain/thornode/common.Address"];
+}

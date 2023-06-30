@@ -1,0 +1,384 @@
+type: state
+genesis:
+  initial_height: "9900000" # For neatness a later height than the inbounds' OutboundHeights.
+  app_state:
+    auth:
+      accounts:
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "0"
+            address: {{ addr_module_transfer }}
+            pub_key: ~
+            sequence: "0"
+          name: transfer
+          permissions:
+            - minter
+            - burner
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "1"
+            address: {{ addr_module_asgard }}
+            pub_key: ~
+            sequence: "0"
+          name: asgard
+          permissions: []
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "2"
+            address: {{ addr_module_thorchain }}
+            pub_key: ~
+            sequence: "0"
+          name: thorchain
+          permissions:
+            - minter
+            - burner
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "3"
+            address: {{ addr_module_reserve }}
+            pub_key: ~
+            sequence: "0"
+          name: reserve
+          permissions: []
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "4"
+            address: {{ addr_module_fee_collector }}
+            pub_key: ~
+            sequence: "0"
+          name: fee_collector
+          permissions: []
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "5"
+            address: {{ addr_module_bond }}
+            pub_key: ~
+            sequence: "0"
+          name: bond
+          permissions: []
+        - "@type": /cosmos.auth.v1beta1.BaseAccount
+          address: {{ addr_thor_dog }}
+          pub_key: null
+          account_number: "6"
+          sequence: "0"
+        - "@type": /cosmos.auth.v1beta1.BaseAccount
+          address: {{ addr_thor_cat }}
+          pub_key: null
+          account_number: "7"
+          sequence: "0"
+        - "@type": /cosmos.auth.v1beta1.BaseAccount
+          address: {{ addr_thor_fox }}
+          pub_key: null
+          account_number: "8"
+          sequence: "0"
+    bank:
+      balances:
+        - address: {{ addr_thor_dog }}
+          coins:
+            - denom: rune
+              amount: "5000000000000"
+        - address: {{ addr_thor_cat }}
+          coins:
+            - denom: rune
+              amount: "2500000000000"
+        - address: {{ addr_thor_fox }}
+          coins:
+            - denom: rune
+              amount: "2500000000000"
+        - address: {{ addr_module_reserve }}
+          coins:
+            - amount: "35000000000000"
+              denom: rune
+        - address: {{ addr_module_asgard }}
+          coins:
+            - amount: "488432852150"
+              denom: btc/btc
+        - address: {{ addr_module_bond }}
+          coins:
+            - amount: "5000000000000"
+              denom: rune
+    thorchain:
+      store_version: "107"  # start at 105 so we run the 108 migration
+      node_accounts:
+        - active_block_height: "0"
+          bond: "5000000000000"
+          ip_address: 1.1.1.1
+          node_address: {{ addr_thor_dog }}
+          bond_address: {{ addr_thor_dog }}
+          pub_key_set:
+            secp256k1: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4"
+            ed25519: "tthorpub1zcjduepqfan43w2emjhfv45gspf98squqlnl2rcchc3e4dx7z2nxr27edflsy2e8ql"
+          signer_membership: []
+          status: Active
+          # matches the priv_validator_key.json mounted in the test container
+          validator_cons_pub_key: tthorcpub1zcjduepqq75h7uy6qhesh9d3a9tuk0mzrnc46u8rye44ze6peua3zmpfh23q8z37sz
+          version: "1.107.0" # Start at V107 so that it can load mgr with the current version before changing to V108.
+# The below pool amount is taken from the actual block 9900000;
+# while the vault amount (to satisfy a desired invariant state at the end)
+# is exactly the four outbounds' amounts greater than it.
+      pools:
+        - LP_units: "19400325778610"
+          asset: BCH.BCH
+          balance_asset: "581321640714"
+          balance_rune: "50449078169082"
+          pending_inbound_asset: "3445344232"
+          pending_inbound_rune: "1207146795"
+          status: Available
+          synth_units: "4877853554134"
+      network_fees:
+        - chain: BCH
+          transaction_fee_rate: "2"
+          transaction_size: "1500"
+      vaults:
+        - block_height: "9867677"
+          chains:
+            - THOR
+            - BCH
+          coins:
+            - amount: "607619832826"
+              asset: BCH.BCH
+          inbound_tx_count: "2241"
+          membership:
+            - tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4
+          pub_key: tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4
+          status: ActiveVault
+          type: AsgardVault
+# The below are the four voters with dangling actions items in need of requeuing.
+      observed_tx_in_voters:
+        - tx_id: "5840920B63CDB9A02028ABB844B28F0305C2B37ADA4F936B69EBEFA04E2F826B"
+          tx:
+            tx:
+              id: "5840920B63CDB9A02028ABB844B28F0305C2B37ADA4F936B69EBEFA04E2F826B"
+              chain: THOR
+              from_address: "thor1t2pfscuq3ctgtf5h3x7p6zrjd7e0jcvuszyvt5"
+              to_address: "thor1g98cy3n9mmjrpn0sxmn63lztelera37n8n67c0"
+              coins:
+                - asset: BTC/BTC
+                  amount: "5242000"
+              gas:
+                - asset: THOR.RUNE
+                  amount: "2000000"
+              memo: "SWAP:bch.bch:qqrxg03xk844apalpajx2r9p0k2zvx32qqj73577m5:909327234"
+            block_height: "9741614"
+            finalise_height: "9741614"
+            observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Mocknet pubkey
+          txs:
+            - tx:
+                id: "5840920B63CDB9A02028ABB844B28F0305C2B37ADA4F936B69EBEFA04E2F826B"
+                chain: THOR
+                from_address: "thor1t2pfscuq3ctgtf5h3x7p6zrjd7e0jcvuszyvt5"
+                to_address: "thor1g98cy3n9mmjrpn0sxmn63lztelera37n8n67c0"
+                coins:
+                  - asset: BTC/BTC
+                    amount: "5242000"
+                gas:
+                  - asset: THOR.RUNE
+                    amount: "2000000"
+                memo: "SWAP:bch.bch:qqrxg03xk844apalpajx2r9p0k2zvx32qqj73577m5:909327234"
+              block_height: "9741614"
+              finalise_height: "9741614"
+              observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Mocknet pubkey
+          actions:
+            - chain: BCH
+              to_address: {{ addr_bch_dog }} # Mocknet BCH address
+              vault_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Changed to a Mocknet pubkey
+              coin:
+                asset: BCH.BCH
+                amount: "914662651"
+              memo: "OUT:5840920B63CDB9A02028ABB844B28F0305C2B37ADA4F936B69EBEFA04E2F826B"
+              max_gas:
+                - asset: BCH.BCH
+                  amount: "4500"
+                  decimals: "8"
+              gas_rate: "3"
+              in_hash: "5840920B63CDB9A02028ABB844B28F0305C2B37ADA4F936B69EBEFA04E2F826B"
+          finalised_height: "9741614"
+          outbound_height: "9741634"
+        - tx_id: "BFACE691A12E85083DD2E4E4ADFBE702299DA6F08A98E6B6F7CF95A9D1D71632"
+          tx:
+            tx:
+              id: "BFACE691A12E85083DD2E4E4ADFBE702299DA6F08A98E6B6F7CF95A9D1D71632"
+              chain: THOR
+              from_address: "thor1t2pfscuq3ctgtf5h3x7p6zrjd7e0jcvuszyvt5"
+              to_address: "thor1g98cy3n9mmjrpn0sxmn63lztelera37n8n67c0"
+              coins:
+                - asset: THOR.RUNE
+                  amount: "205384100000"
+              gas:
+                - asset: THOR.RUNE
+                  amount: "2000000"
+              memo: "SWAP:bch.bch:qqrxg03xk844apalpajx2r9p0k2zvx32qqj73577m5:2478782632"
+            block_height: "9741614"
+            finalise_height: "9741614"
+            observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Mocknet pubkey
+          txs:
+            - tx:
+                id: "BFACE691A12E85083DD2E4E4ADFBE702299DA6F08A98E6B6F7CF95A9D1D71632"
+                chain: THOR
+                from_address: "thor1t2pfscuq3ctgtf5h3x7p6zrjd7e0jcvuszyvt5"
+                to_address: "thor1g98cy3n9mmjrpn0sxmn63lztelera37n8n67c0"
+                coins:
+                  - asset: THOR.RUNE
+                    amount: "205384100000"
+                gas:
+                  - asset: THOR.RUNE
+                    amount: "2000000"
+                memo: "SWAP:bch.bch:qqrxg03xk844apalpajx2r9p0k2zvx32qqj73577m5:2478782632"
+              block_height: "9741614"
+              finalise_height: "9741614"
+              observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Mocknet pubkey
+          actions:
+            - chain: BCH
+              to_address: {{ addr_bch_dog }} # Mocknet BCH address
+              vault_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Changed to a Mocknet pubkey
+              coin:
+                asset: BCH.BCH
+                amount: "2498752335"
+              memo: "OUT:BFACE691A12E85083DD2E4E4ADFBE702299DA6F08A98E6B6F7CF95A9D1D71632"
+              max_gas:
+                - asset: BCH.BCH
+                  amount: "4500"
+                  decimals: "8"
+              gas_rate: "3"
+              in_hash: "BFACE691A12E85083DD2E4E4ADFBE702299DA6F08A98E6B6F7CF95A9D1D71632"
+          finalised_height: "9741614"
+          outbound_height: "9741621"
+        - tx_id: "395EBDADA6D0975CF4D3F2E2BD7E246037C672C9CAB97DBFB744CC0F2FFABE95"
+          tx:
+            tx:
+              id: "395EBDADA6D0975CF4D3F2E2BD7E246037C672C9CAB97DBFB744CC0F2FFABE95"
+              chain: THOR
+              from_address: "thor1t2pfscuq3ctgtf5h3x7p6zrjd7e0jcvuszyvt5"
+              to_address: "thor1g98cy3n9mmjrpn0sxmn63lztelera37n8n67c0"
+              coins:
+                - asset: THOR.RUNE
+                  amount: "605411550000"
+              gas:
+                - asset: THOR.RUNE
+                  amount: "2000000"
+              memo: "SWAP:bch.bch:qqrxg03xk844apalpajx2r9p0k2zvx32qqj73577m5:7306708266"
+            block_height: "9741614"
+            finalise_height: "9741614"
+            observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Mocknet pubkey
+          txs:
+            - tx:
+                id: "395EBDADA6D0975CF4D3F2E2BD7E246037C672C9CAB97DBFB744CC0F2FFABE95"
+                chain: THOR
+                from_address: "thor1t2pfscuq3ctgtf5h3x7p6zrjd7e0jcvuszyvt5"
+                to_address: "thor1g98cy3n9mmjrpn0sxmn63lztelera37n8n67c0"
+                coins:
+                  - asset: THOR.RUNE
+                    amount: "605411550000"
+                gas:
+                  - asset: THOR.RUNE
+                    amount: "2000000"
+                memo: "SWAP:bch.bch:qqrxg03xk844apalpajx2r9p0k2zvx32qqj73577m5:7306708266"
+              block_height: "9741614"
+              finalise_height: "9741614"
+              observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Mocknet pubkey
+          actions:
+            - chain: BCH
+              to_address: {{ addr_bch_dog }} # Mocknet BCH address
+              vault_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Changed to a Mocknet pubkey
+              coin:
+                asset: BCH.BCH
+                amount: "7425918474"
+              memo: "OUT:395EBDADA6D0975CF4D3F2E2BD7E246037C672C9CAB97DBFB744CC0F2FFABE95"
+              max_gas:
+                - asset: BCH.BCH
+                  amount: "11250"
+                  decimals: "8"
+              gas_rate: "3"
+              in_hash: "395EBDADA6D0975CF4D3F2E2BD7E246037C672C9CAB97DBFB744CC0F2FFABE95"
+          finalised_height: "9741614"
+          outbound_height: "9741674"
+        - tx_id: "5881692D0522D0D5221A61FC0704B018ED51A6C43475063ADF6AC912D748208D"
+          tx:
+            tx:
+              id: "5881692D0522D0D5221A61FC0704B018ED51A6C43475063ADF6AC912D748208D"
+              chain: THOR
+              from_address: "thor1t2pfscuq3ctgtf5h3x7p6zrjd7e0jcvuszyvt5"
+              to_address: "thor1g98cy3n9mmjrpn0sxmn63lztelera37n8n67c0"
+              coins:
+                - asset: THOR.RUNE
+                  amount: "1230374950000"
+              gas:
+                - asset: THOR.RUNE
+                  amount: "2000000"
+              memo: "SWAP:bch.bch:qqrxg03xk844apalpajx2r9p0k2zvx32qqj73577m5:14849382697"
+            block_height: "9741614"
+            finalise_height: "9741614"
+            observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Mocknet pubkey
+          txs:
+            - tx:
+                id: "5881692D0522D0D5221A61FC0704B018ED51A6C43475063ADF6AC912D748208D"
+                chain: THOR
+                from_address: "thor1t2pfscuq3ctgtf5h3x7p6zrjd7e0jcvuszyvt5"
+                to_address: "thor1g98cy3n9mmjrpn0sxmn63lztelera37n8n67c0"
+                coins:
+                  - asset: THOR.RUNE
+                    amount: "1230374950000"
+                gas:
+                  - asset: THOR.RUNE
+                    amount: "2000000"
+                memo: "SWAP:bch.bch:qqrxg03xk844apalpajx2r9p0k2zvx32qqj73577m5:14849382697"
+              block_height: "9741614"
+              finalise_height: "9741614"
+              observed_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Mocknet pubkey
+          actions:
+            - chain: BCH
+              to_address: {{ addr_bch_dog }} # Mocknet BCH address
+              vault_pub_key: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4" # Changed to a Mocknet pubkey
+              coin:
+                asset: BCH.BCH
+                amount: "15458858652"
+              memo: "OUT:5881692D0522D0D5221A61FC0704B018ED51A6C43475063ADF6AC912D748208D"
+              max_gas:
+                - asset: BCH.BCH
+                  amount: "3500"
+                  decimals: "8"
+              gas_rate: "3"
+              in_hash: "5881692D0522D0D5221A61FC0704B018ED51A6C43475063ADF6AC912D748208D"
+          finalised_height: "9741614"
+          outbound_height: "9741674"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: at least one ActiveVault Asgard should exist
+endpoint: http://localhost:1317/thorchain/vaults/asgard
+asserts:
+  - .|[.[]|select(.status == "ActiveVault")]|length > 0
+---
+type: check
+description: the version should currently be 1.107.0
+endpoint: http://localhost:1317/thorchain/version
+asserts:
+  - .|.current == "1.107.0"
+---
+type: check
+description: there should currently be no txout items in the outbound queue
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+type: tx-version
+version: "1.108.0"
+signer: {{ addr_thor_dog }}
+---
+type: create-blocks
+count: 2 # Two blocks to be sure the store migration takes place before the next check.
+---
+type: check
+description: the version should now have been increased to 1.108.0
+endpoint: http://localhost:1317/thorchain/version
+asserts:
+  - .|.current == "1.108.0"
+---
+type: check
+description: there should now be four txout items in the outbound queue
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 4
+# Read the export file for more details of said items.

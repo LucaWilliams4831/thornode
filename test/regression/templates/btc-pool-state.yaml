@@ -1,0 +1,57 @@
+type: state
+genesis:
+  app_state:
+    bank:
+      balances:
+        - address: {{ addr_module_asgard }}
+          coins:
+            - amount: "100000000000"
+              denom: rune
+    thorchain:
+      liquidity_providers:
+        - asset: BTC.BTC
+          asset_address: {{ addr_btc_cat }}
+          asset_deposit_value: "100000000"
+          last_add_height: "1"
+          pending_asset: "0"
+          pending_rune: "0"
+          rune_address: {{ addr_thor_cat }}
+          rune_deposit_value: "100000000000"
+          units: "100000000000"
+      pools:
+        - LP_units: "100000000000"
+          asset: BTC.BTC
+          balance_asset: "100000000"
+          balance_rune: "100000000000"
+          decimals: "8"
+          pending_inbound_asset: "0"
+          pending_inbound_rune: "0"
+          status: Available
+          synth_units: "0"
+      network_fees:
+        - chain: BTC
+          transaction_fee_rate: "7"
+          transaction_size: "1000"
+      vaults:
+        - block_height: "0"
+          chains:
+            - THOR
+            - BTC
+            - LTC
+            - BCH
+            - BNB
+            - ETH
+            - DOGE
+            - TERRA
+            - AVAX
+            - GAIA
+          coins:
+            - amount: "100000000"
+              asset: BTC.BTC
+              decimals: "8"
+          inbound_tx_count: "1"
+          membership:
+            - tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4
+          pub_key: tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4
+          status: ActiveVault
+          type: AsgardVault

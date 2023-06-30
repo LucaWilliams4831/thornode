@@ -1,0 +1,23 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: tx-network-fee
+signer: {{ addr_thor_dog }}
+block_height: 1
+chain: BTC
+transaction_size: 3
+transaction_rate: 7
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: network fee for BTC should be updated
+endpoint: http://localhost:1317/thorchain/inbound_addresses
+asserts:
+  - .|length == 10
+  - .[0].chain == "BTC"
+  - .[0].outbound_tx_size == "3"
+  - .[0].outbound_fee == "42"

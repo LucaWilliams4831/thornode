@@ -1,0 +1,15 @@
+# Base image for running thornode.
+FROM alpine:3
+
+RUN apk add --no-cache \
+    bind-tools=9.16.29-r0 \
+    curl=7.83.1-r1 \
+    gcc=11.2.1_git20220219-r2 \
+    jq=1.6-r1 \
+    libffi-dev=3.4.2-r1  \
+    musl-dev=1.2.3-r0 \
+    openssl-dev=1.1.1o-r0 \
+    protoc=3.18.1-r2 \
+    py3-pip=22.1.1-r0 \
+    python3-dev=3.10.4-r0 \
+    && pip3 install --no-cache-dir requests==2.22.0 web3==5.29.0

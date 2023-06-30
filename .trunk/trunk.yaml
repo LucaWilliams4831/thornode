@@ -1,0 +1,62 @@
+version: 0.1
+cli:
+  version: 1.7.0
+lint:
+  enabled:
+    - black-py@23.3.0
+    - black@23.3.0
+    - flake8@6.0.0
+    - git-diff-check
+    - gofmt@1.19.4
+    - golangci-lint@1.52.2
+    - hadolint@2.12.0
+    - isort@5.12.0
+    - markdownlint@0.33.0
+    - prettier@2.8.7
+    - shellcheck@0.9.0
+    - shfmt@3.5.0
+    - taplo@0.7.0
+    - yamllint@1.29.0
+
+    # TODO: enable after fixing false positive generic api key errors
+    # - gitleaks@8.16.2
+
+    # TODO: enable after fixing errors
+    # - ruff@0.0.256
+    # - oxipng@8.0.0
+  ignore:
+    - linters: [ALL]
+      paths:
+        - build/docker/Dockerfile
+        # NOTE: Temporarily disabled to import Heimdall repo.
+        - test/smoke
+    - linters:
+        - prettier
+        - yamllint
+      paths:
+        - test/fixtures/endpoints/auth/accounts/malformed.json
+        - test/regression/README.md
+        - test/regression/mnt/exports/**
+        - test/regression/suites/**
+        - test/regression/templates/**
+    - linters:
+        - hadolint
+      paths:
+        - ci/Dockerfile.regtest.dockerignore
+actions:
+  disabled:
+    - trunk-announce
+    - trunk-check-pre-push
+    - trunk-fmt-pre-commit
+  enabled:
+    - trunk-upgrade-available
+plugins:
+  sources:
+    - id: trunk
+      ref: v0.0.13
+      uri: https://github.com/trunk-io/plugins
+runtimes:
+  enabled:
+    - go@1.20.3
+    - node@18.12.1
+    - python@3.10.8

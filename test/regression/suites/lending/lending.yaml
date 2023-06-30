@@ -1,0 +1,712 @@
+{{ template "default-state.yaml" }}
+---
+{{ template "btc-eth-usdc-pool-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: eth, btc, and usdc pools should exist
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 3
+# /pool/THOR.ETH can't be checked for .status == null
+# because of ERR cmd/run.go:275 > operation failed error="unexpected status code: 404"
+---
+########################################################################################
+# enable lending
+########################################################################################
+type: tx-mimir
+signer: {{ addr_thor_dog }}
+key: TorAnchor-ETH-USDC-0X9999999999999999999999999999999999999999
+value: 1
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: tor anchor mimir should be set
+endpoint: http://localhost:1317/thorchain/mimir
+asserts:
+  - ."TORANCHOR-ETH-USDC-0X9999999999999999999999999999999999999999" == 1
+---
+type: check
+description: derived pools should not be created
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 3
+---
+type: tx-mimir
+signer: {{ addr_thor_dog }}
+key: DerivedDepthBasisPts
+value: 10000
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: derived depth basis points mimir should be set
+endpoint: http://localhost:1317/thorchain/mimir
+asserts:
+  - .DERIVEDDEPTHBASISPTS == 10000
+---
+type: check
+description: derived pools should not be created
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 3
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: zero-unit derived pools (eth and btc only) are not displayed by the /pools endpoint
+endpoint: http://localhost:1317/thorchain/pools
+asserts:
+  - .|length == 3
+---
+type: check
+description: thor.eth pool should be created
+endpoint: http://localhost:1317/thorchain/pool/THOR.ETH
+asserts:
+  - .status == "Available"
+---
+type: check
+description: thor.btc pool should be created
+endpoint: http://localhost:1317/thorchain/pool/THOR.BTC
+asserts:
+  - .status == "Available"
+---
+########################################################################################
+# fail open loan due to min out
+########################################################################################
+type: check
+description: check loan open quote with bad min out
+endpoint: http://localhost:1317/thorchain/quote/loan/open
+params:
+  asset: BTC.BTC
+  amount: 500000
+  target_asset: ETH.ETH
+  destination: {{ addr_eth_fox }}
+  min_out: 1000000000000000000
+asserts:
+  - .error|test("less than price limit")
+---
+type: check
+description: BTC pool depth (want to confirm pool depths remain unchanged)
+endpoint: http://localhost:1317/thorchain/pool/btc.btc
+asserts:
+  - .balance_rune | tonumber == 100001391004
+  - .balance_asset | tonumber == 100000000
+---
+type: check
+description: ETH pool depth (want to confirm pool depths remain unchanged)
+endpoint: http://localhost:1317/thorchain/pool/eth.eth
+asserts:
+  - .balance_rune | tonumber == 100001391004
+  - .balance_asset | tonumber == 1000000000
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 2 }}"
+      chain: BTC
+      from_address: {{ addr_btc_fox }}
+      to_address: {{ addr_btc_dog }}
+      coins:
+        - amount: "500000" # 0.5% of pool
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10000"
+          asset: "BTC.BTC"
+      memo: "LOAN+:ETH.ETH:{{ addr_eth_fox }}:1000000000000000000"
+    block_height: 2
+    finalise_height: 2
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: borrower should NOT be updated
+endpoint: http://localhost:1317/thorchain/pool/btc.btc/borrowers
+asserts:
+  - .|length == 0
+---
+type: check
+description: btc outbound should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 1
+  - .[0]|.in_hash == "{{ observe_txid 2 }}"
+---
+type: tx-observed-out
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 3 }}"
+      chain: BTC
+      from_address: {{ addr_btc_dog }}
+      to_address: {{ addr_btc_fox }}
+      coins:
+        - amount: "486000"
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10500"
+          asset: "BTC.BTC"
+      memo: "REFUND:{{ observe_txid 2 }}"
+    block_height: 3
+    finalise_height: 3
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: btc outbound should be observed
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+type: check
+description: BTC pool depth (want to confirm pool depths remain unchanged, except for gas used to refund btc deposit)
+endpoint: http://localhost:1317/thorchain/pool/btc.btc
+asserts:
+  - .balance_rune | tonumber == 99998585487
+  - .balance_asset | tonumber == 100003500
+---
+type: check
+description: ETH pool depth (want to confirm pool depths remain unchanged, but depth does change from block rewards it seems)
+endpoint: http://localhost:1317/thorchain/pool/eth.eth
+asserts:
+  - .balance_rune | tonumber == 100002086540
+  - .balance_asset | tonumber == 1000000000
+---
+########################################################################################
+# open loan btc -> rune
+########################################################################################
+type: check
+description: check loan open quote
+endpoint: http://localhost:1317/thorchain/quote/loan/open
+params:
+  asset: BTC.BTC
+  amount: 500000
+  target_asset: RUNE
+  destination: {{ addr_thor_fox }}
+asserts:
+  - .memo == "$+:THOR.RUNE:{{ addr_thor_fox }}"
+  - .inbound_address == "{{ addr_btc_dog }}"
+  - .expected_amount_out|tonumber == 483351059
+  - .expected_collateral_up|tonumber == 495049
+  - .expected_collateralization_ratio|tonumber == 10000
+  - .expected_debt_up|tonumber == 490110000
+  - .recommended_min_amount_in == "56000"
+  - .fees.total_bps|tonumber == 188
+  - .fees.outbound|tonumber == 2000000
+  - .fees.liquidity|tonumber == 7291237
+---
+type: check
+description: no derived btc should exist
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/supply
+asserts:
+  - .supply[]|select(.denom == "rune")|.amount|tonumber == 50300000000000
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 1 }}"
+      chain: BTC
+      from_address: {{ addr_btc_fox }}
+      to_address: {{ addr_btc_dog }}
+      coins:
+        - amount: "500000" # 0.5% of pool
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10000"
+          asset: "BTC.BTC"
+      memo: "LOAN+:THOR.RUNE:{{ addr_thor_fox }}"
+    block_height: 1
+    finalise_height: 1
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: borrower should be recorded
+endpoint: http://localhost:1317/thorchain/pool/btc.btc/borrowers
+asserts:
+  - .|length == 1
+  - .[0]|.collateral_up == "495049"
+  - .[0]|.debt_up == "490110000"
+  - .[0]|.collateral_down == "0"
+  - .[0]|.debt_down == "0"
+  - .[0]|.owner == "{{ addr_btc_fox }}"
+---
+type: check
+description: loan should exist in export state
+endpoint: http://localhost:1317/thorchain/export
+asserts:
+  - .loans|length == 1
+---
+type: check
+description: derived btc should exist in the lending module
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_module_lending }}
+asserts:
+  - .balances[]|select(.denom == "thor.btc")|.amount|tonumber == 495049
+---
+type: check
+description: check rune supply decreases
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/supply
+asserts:
+  - .supply[]|select(.denom == "rune")|.amount|tonumber == 50299990337963
+---
+type: check
+description: fox account should not receive rune until next block
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2500483351059
+---
+type: check
+description: should emit 5 mint_burn events
+endpoint: http://localhost:1317/thorchain/blockevents
+asserts:
+  - .|[.end[]|select(.type == "mint_burn")]|length == 5
+---
+########################################################################################
+# open loan btc -> eth
+########################################################################################
+type: check
+description: check loan open quote
+endpoint: http://localhost:1317/thorchain/quote/loan/open
+params:
+  asset: BTC.BTC
+  amount: 500000
+  target_asset: ETH.ETH
+  destination: {{ addr_eth_fox }}
+asserts:
+  - .memo == "$+:ETH.ETH:{{ addr_eth_fox }}"
+  - .inbound_address == "{{ addr_btc_dog }}"
+  - .expected_amount_out|tonumber == 3480464
+  - .expected_collateral_up|tonumber == 495074
+  - .expected_collateralization_ratio|tonumber == 10000
+  - .expected_debt_up|tonumber == 485310000
+  - .recommended_min_amount_in == "517152"
+  - .fees.total_bps|tonumber == 2831
+  - .fees.outbound|tonumber == 1280000
+  - .fees.liquidity|tonumber == 94606
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 3 }}"
+      chain: BTC
+      from_address: {{ addr_btc_fox }}
+      to_address: {{ addr_btc_dog }}
+      coins:
+        - amount: "500000" # 0.5% of pool
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10000"
+          asset: "BTC.BTC"
+      memo: "LOAN+:ETH.ETH:{{ addr_eth_fox }}:1"
+    block_height: 2
+    finalise_height: 2
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: borrower should be updated
+endpoint: http://localhost:1317/thorchain/pool/btc.btc/borrowers
+asserts:
+  - .|length == 1
+  - .[0]|.collateral_up == "989774"
+  - .[0]|.debt_up == "975080000"
+  - .[0]|.collateral_down == "0"
+  - .[0]|.debt_down == "0"
+  - .[0]|.owner == "{{ addr_btc_fox }}"
+---
+type: check
+description: eth outbound should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 1
+  - .[0]|.in_hash == "{{ observe_txid 3 }}"
+---
+type: tx-observed-out
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 4 }}"
+      chain: ETH
+      from_address: {{ addr_eth_dog }}
+      to_address: {{ addr_eth_fox }}
+      coins:
+        - amount: "3477193"
+          asset: "ETH.ETH"
+          decimals: 8
+      gas:
+        - amount: "960000"
+          asset: "ETH.ETH"
+      memo: "OUT:{{ observe_txid 3 }}"
+    block_height: 3
+    finalise_height: 3
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: check
+description: should emit 5 mint_burn events
+endpoint: http://localhost:1317/thorchain/blockevents
+asserts:
+  - .|[.end[]|select(.type == "mint_burn")]|length == 5
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: eth outbound should be observed
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+########################################################################################
+# close loan with bad min out
+########################################################################################
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 5 }}"
+      chain: ETH
+      from_address: {{ addr_eth_fox }}
+      to_address: {{ addr_eth_dog }}
+      coins:
+        - amount: "50000000" # 0.5% of pool
+          asset: "ETH.ETH"
+          decimals: 8
+      gas:
+        - amount: "960000"
+          asset: "ETH.ETH"
+      memo: "LOAN-:BTC.BTC:{{ addr_btc_fox }}:18446744073709551615"
+    block_height: 2
+    finalise_height: 2
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: borrower should NOT be updated
+endpoint: http://localhost:1317/thorchain/pool/btc.btc/borrowers
+asserts:
+  - .|length == 1
+  - .[0]|.collateral_up == "989774"
+  - .[0]|.debt_up == "975080000"
+  - .[0]|.owner == "{{ addr_btc_fox }}"
+  # everything above is the same, but now collateral and debt down should exist
+  - .[0]|.collateral_down == "0"
+  - .[0]|.debt_down == "0"
+---
+type: check
+description: eth outbound should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 1
+  - .[0]|.in_hash == "{{ observe_txid 5 }}"
+---
+type: tx-observed-out
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 6 }}"
+      chain: ETH
+      from_address: {{ addr_eth_dog }}
+      to_address: {{ addr_eth_fox }}
+      coins:
+        - amount: "48720000"
+          asset: "ETH.ETH"
+          decimals: 8
+      gas:
+        - amount: "960000"
+          asset: "ETH.ETH"
+      memo: "REFUND:{{ observe_txid 5 }}"
+    block_height: 4
+    finalise_height: 4
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: eth outbound should be observed
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+########################################################################################
+# close half of loan with rune, should pay down debt but not return collateral
+########################################################################################
+type: check
+description: check loan close quote
+endpoint: http://localhost:1317/thorchain/quote/loan/close
+params:
+  asset: THOR.RUNE
+  amount: 500000000
+  loan_asset: BTC.BTC
+  loan_owner: {{ addr_btc_fox }}
+asserts:
+  - .memo == "$-:BTC.BTC:{{ addr_btc_fox }}"
+  - .expected_collateral_down|tonumber == 0
+  - .expected_debt_down|tonumber == 495021900
+  - .fees.liquidity|tonumber == 2525
+---
+type: tx-deposit
+signer: {{ addr_thor_fox }}
+coins:
+  - amount: "500000000"
+    asset: "rune"
+memo: "LOAN-:BTC.BTC:{{ addr_btc_fox }}"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: borrower should be updated
+endpoint: http://localhost:1317/thorchain/pool/btc.btc/borrowers
+asserts:
+  - .|length == 1
+  - .[0]|.collateral_up == "989774"
+  - .[0]|.debt_up == "975080000"
+  - .[0]|.owner == "{{ addr_btc_fox }}"
+  - .[0]|.collateral_down == "0"
+  - .[0]|.debt_down == "495021900"
+---
+type: check
+description: no outbounds should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+########################################################################################
+# close remaining loan with eth (overpay)
+########################################################################################
+type: check
+description: check loan close quote
+endpoint: http://localhost:1317/thorchain/quote/loan/close
+params:
+  asset: ETH.ETH
+  amount: 50000000
+  loan_asset: BTC.BTC
+  loan_owner: {{ addr_btc_fox }}
+asserts:
+  - .memo == "$-:BTC.BTC:{{ addr_btc_fox }}"
+  - .inbound_address == "{{ addr_eth_dog }}"
+  - .expected_amount_out|tonumber == 936255
+  - .expected_collateral_down|tonumber == 989774
+  - .expected_debt_down|tonumber == 4180150193
+  - .fees.total_bps|tonumber == 4941
+  - .fees.outbound|tonumber == 14000
+  - .fees.liquidity|tonumber == 448687
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 6 }}"
+      chain: ETH
+      from_address: {{ addr_eth_fox }}
+      to_address: {{ addr_eth_dog }}
+      coins:
+        - amount: "50000000"
+          asset: "ETH.ETH"
+          decimals: 8
+      gas:
+        - amount: "960000"
+          asset: "ETH.ETH"
+      memo: "LOAN-:BTC.BTC:{{ addr_btc_fox }}"
+    block_height: 5
+    finalise_height: 5
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: borrower should be updated
+endpoint: http://localhost:1317/thorchain/pool/btc.btc/borrowers
+asserts:
+  - .|length == 1
+  - .[0]|.collateral_up == "989774"
+  - .[0]|.debt_up == "975080000"
+  - .[0]|.owner == "{{ addr_btc_fox }}"
+  - .[0]|.collateral_down == "989774" # should now be fully repaid
+  - .[0]|.debt_down == "4675172093" # over repaid
+---
+type: check
+description: btc outbound should be scheduled
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 1
+  - .[0]|.in_hash == "{{ observe_txid 6 }}"
+---
+type: tx-observed-out
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 7 }}"
+      chain: BTC
+      from_address: {{ addr_btc_dog }}
+      to_address: {{ addr_btc_fox }}
+      coins:
+        - amount: "936255"
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10500"
+          asset: "BTC.BTC"
+      memo: "OUT:{{ observe_txid 6 }}"
+    block_height: 6
+    finalise_height: 6
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: check
+description: should emit 5 mint_burn events
+endpoint: http://localhost:1317/thorchain/blockevents
+asserts:
+  - .|[.end[]|select(.type == "mint_burn")]|length == 5
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: btc outbound should be observed
+endpoint: http://localhost:1317/thorchain/queue/outbound
+asserts:
+  - .|length == 0
+---
+type: check
+description: no derived btc should exist
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/supply
+asserts:
+  - '[.supply[]|select(.denom == "thor.btc")]|length == 0'
+---
+########################################################################################
+# open loan btc -> rune from existing overpaid loan address
+########################################################################################
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 7 }}"
+      chain: BTC
+      from_address: {{ addr_btc_fox }}
+      to_address: {{ addr_btc_dog }}
+      coins:
+        - amount: "500000" # 0.5% of pool
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10000"
+          asset: "BTC.BTC"
+      memo: "LOAN+:THOR.RUNE:{{ addr_thor_fox }}:1"
+    block_height: 7
+    finalise_height: 7
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: borrower should be updated
+endpoint: http://localhost:1317/thorchain/pool/btc.btc/borrowers
+asserts:
+  - .|length == 1
+  - .[0]|.collateral_up == "1483871"
+  - .[0]|.debt_up == "5163892093"
+  - .[0]|.owner == "{{ addr_btc_fox }}"
+  - .[0]|.collateral_down == "989774"
+  - .[0]|.debt_down == "4675172093"
+---
+type: check
+description: fox account balance should be unchanged
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2503838267325
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: fox account should have receieved rune
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 1
+  # should receieve significantly more than the first open for the same amount since the
+  # excess debt down will be credited on the subsequent open
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2503838267325
+---
+########################################################################################
+# open loan btc -> rune again should not get extra credit on subsequent open
+########################################################################################
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 8 }}"
+      chain: BTC
+      from_address: {{ addr_btc_fox }}
+      to_address: {{ addr_btc_dog }}
+      coins:
+        - amount: "500000" # 0.5% of pool
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10000"
+          asset: "BTC.BTC"
+      memo: "LOAN+:THOR.RUNE:{{ addr_thor_fox }}:1"
+    block_height: 8
+    finalise_height: 8
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: borrower should be updated
+endpoint: http://localhost:1317/thorchain/pool/btc.btc/borrowers
+asserts:
+  - .|length == 1
+  - .[0]|.collateral_up == "1977756"
+  - .[0]|.debt_up == "5647602093"
+  - .[0]|.owner == "{{ addr_btc_fox }}"
+  - .[0]|.collateral_down == "989774"
+  - .[0]|.debt_down == "4675172093"
+---
+type: check
+description: fox account balance should be unchanged
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 1
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2504315351613
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: fox account should have receieved rune
+endpoint: http://localhost:1317/cosmos/bank/v1beta1/balances/{{ addr_thor_fox }}
+asserts:
+  - .balances|length == 1
+    # this time they should receieve a normal amount relative to the deposit since the
+    # excess debt down was credited on the previous open
+  - .balances[]|select(.denom == "rune")|.amount|tonumber == 2504315351613

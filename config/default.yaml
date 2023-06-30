@@ -1,0 +1,301 @@
+########################################################################################
+# Bifrost
+########################################################################################
+
+bifrost:
+  # leveldb defaults to start, plus 10 bit per key filter
+  observer_leveldb: &default-leveldb
+    filter_bits_per_key: 10
+    compaction_table_size_multiplier: 1
+    write_buffer: 4194304
+    block_cache_capacity: 8388608
+    compact_on_init: true
+
+  metrics:
+    enabled: true
+    pprof_enabled: false
+    listen_port: 9000
+    read_timeout: 30s
+    write_timeout: 30s
+    chains:
+      - AVAX
+      - BCH
+      - BNB
+      - BTC
+      - DOGE
+      - ETH
+      - GAIA
+      - LTC
+      - BSC
+  thorchain:
+    chain_id: thorchain
+    chain_host: localhost:1317
+    chain_rpc: ""
+    chain_home_folder: ""
+    signer_name: ""
+  back_off:
+    initial_interval: 500ms
+    randomization_factor: 0.5
+    multiplier: 1.5
+    max_interval: 3m
+    max_elapsed_time: 168h
+  signer:
+    backup_keyshares: true
+    signer_db_path: /var/data/bifrost/signer_db
+    retry_interval: 2s
+    reschedule_buffer_blocks: 50 # 5 minutes
+    block_scanner:
+      chain_id: ThorChain
+      rpc_host: 127.0.0.1:26657
+      start_block_height: 0
+      block_retry_interval: 10s
+      block_height_discover_back_off: 5s
+      block_scan_processors: 1
+      start_block: "0"
+      http_request_timeout: 30s
+      http_request_read_timeout: 30s
+      http_request_write_timeout: 30s
+      max_http_request_retry: "10"
+    leveldb: *default-leveldb
+    auto_observe: true
+  tss:
+    rendezvous: asgard
+    p2p_port: 5040
+    info_address: :6040
+    bootstrap_peers: ""
+    external_ip: ""
+    max_keyshare_recover_scan_blocks: 100
+  chains:
+    btc: &default-chain
+      disabled: false
+      chain_id: BTC
+      username: thorchain
+      password: password
+      http_post_mode: 1
+      disable_tls: 1
+      parallel_mempool_scan: 5
+      mempool_tx_id_cache_size: 1_000_000
+      scanner_leveldb:
+        <<: *default-leveldb
+        compaction_table_size_multiplier: 10
+        write_buffer: 20971520 # 20mb
+        block_cache_capacity: 536870912 # 512mb
+
+      # the following defaults must be defined to override with environment
+      chain_host: ""
+      chain_network: ""
+      rpc_host: ""
+      cosmos_grpc_host: ""
+      cosmos_grpc_tls: ""
+      opt_to_retire: false
+      solvency_blocks: 0
+      back_off:
+        initial_interval: 0
+        randomization_factor: 0
+        multiplier: 0
+        max_interval: 0
+        max_elapsed_time: 0
+
+      block_scanner: &default-block-scanner
+        chain_id: BTC
+        enforce_block_height: false
+        block_scan_processors: 1
+        block_height_discover_back_off: 5s
+        observation_flexibility_blocks: 3
+        block_retry_interval: 10s
+        http_request_timeout: 30s
+        http_request_read_timeout: 30s
+        http_request_write_timeout: 30s
+        max_http_request_retry: 10
+        db_path: /var/data/bifrost/observer
+
+        # the following defaults must be defined to override with environment
+        rpc_host: ""
+        start_block_height: 0
+        cosmos_grpc_host: ""
+        cosmos_grpc_tls: false
+        gas_cache_blocks: 0
+        whitelist_tokens: []
+        concurrency: 0
+        max_gas_fee: 0
+        gas_price_resolution: 0
+        max_contract_gas: 0
+    bnb:
+      <<: *default-chain
+      chain_id: BNB
+      block_scanner:
+        <<: *default-block-scanner
+        chain_id: BNB
+        block_height_discover_back_off: 0.3s
+        observation_flexibility_blocks: 2
+      mempool_tx_id_cache_size: 0
+      scanner_leveldb: *default-leveldb
+    eth:
+      <<: *default-chain
+      chain_id: ETH
+      block_scanner:
+        <<: *default-block-scanner
+        gas_cache_blocks: 40
+        concurrency: 1
+        chain_id: ETH
+        observation_flexibility_blocks: 20
+      mempool_tx_id_cache_size: 0
+      scanner_leveldb: *default-leveldb
+    avax:
+      <<: *default-chain
+      chain_id: AVAX
+      solvency_blocks: 100
+      block_scanner:
+        <<: *default-block-scanner
+        concurrency: 1
+        chain_id: AVAX
+        gas_cache_blocks: 40
+        gas_price_resolution: 50_000_000_000 # 50 navax
+        observation_flexibility_blocks: 80
+        max_gas_fee: 400000
+        max_contract_gas: 80000
+        whitelist_tokens: # stable coins only
+          - 0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7 # USDT
+          - 0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E # USDC
+      mempool_tx_id_cache_size: 0
+      scanner_leveldb: *default-leveldb
+    bsc:
+      disabled: true
+      <<: *default-chain
+      chain_id: BSC
+      solvency_blocks: 100
+      block_scanner:
+        <<: *default-block-scanner
+        concurrency: 1
+        chain_id: BSC
+        gas_cache_blocks: 40
+        gas_price_resolution: 50_000_000_000 # 50 gwei
+        observation_flexibility_blocks: 80
+        max_gas_fee: 400000
+        max_contract_gas: 80000
+        whitelist_tokens: # stable coins only
+          - 0x55d398326f99059fF775485246999027B3197955 # Binance Pegged USDT
+          - 0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d # Binance Pegged USDC
+          - 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56 # Binance Pegged BUSD
+          - 0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3 # Binance Pegged DAI
+          - 0x14016E85a25aeb13065688cAFB43044C2ef86784 # True USD
+      mempool_tx_id_cache_size: 0
+      scanner_leveldb: *default-leveldb
+    doge:
+      <<: *default-chain
+      chain_id: DOGE
+      block_scanner:
+        <<: *default-block-scanner
+        chain_id: DOGE
+        gas_price_resolution: 500_000 # sats
+      mempool_tx_id_cache_size: 0
+      scanner_leveldb: *default-leveldb
+    gaia:
+      <<: *default-chain
+      chain_id: GAIA
+      block_scanner:
+        <<: *default-block-scanner
+        chain_id: GAIA
+        gas_price_resolution: 100_000 # uatom
+        observation_flexibility_blocks: 40
+      mempool_tx_id_cache_size: 0
+      scanner_leveldb: *default-leveldb
+    ltc:
+      <<: *default-chain
+      chain_id: LTC
+      block_scanner:
+        <<: *default-block-scanner
+        chain_id: LTC
+        observation_flexibility_blocks: 3
+      mempool_tx_id_cache_size: 0
+      scanner_leveldb: *default-leveldb
+    bch:
+      <<: *default-chain
+      chain_id: BCH
+      block_scanner:
+        <<: *default-block-scanner
+        chain_id: BCH
+        observation_flexibility_blocks: 3
+      mempool_tx_id_cache_size: 0
+      scanner_leveldb: *default-leveldb
+
+########################################################################################
+# Thor
+########################################################################################
+
+thor:
+  node_relay_url: https://node-relay-bot.herokuapp.com
+
+  log_filter:
+    modules:
+      - api-server
+      - consensus
+      - evidence
+      - mempool
+      - p2p
+      - pex
+      - rpc
+      - rpc-server
+      - txindex
+      - x/bank
+    messages:
+      - executed block
+      - commit synced
+
+  auto_state_sync:
+    enabled: false
+    block_buffer: 150_000
+    peers:
+      # NOTE: These are peers for auto state sync on mainnet only.
+      - c3613862c2608b3e861406ad02146f41cf5124e6@statesync-seed.ninerealms.com:27146
+      - dbd1730bff1e8a21aad93bc6083209904d483185@statesync-seed-2.ninerealms.com:27146
+  api:
+    limit_count: 60
+    limit_duration: 1m
+  cosmos:
+    pruning: nothing
+    halt_height: 0
+    min_retain_blocks: 0
+    telemetry:
+      enabled: false
+      prometheus_retention_time: 600
+    api:
+      enable: true
+      enabled_unsafe_cors: true
+      address: tcp://0.0.0.0:1317
+    state_sync:
+      snapshot_interval: 0
+      snapshot_keep_recent: 2
+  tendermint:
+    log:
+      level: info
+      format: plain
+    rpc:
+      listen_address: "" # set dynamically
+      cors_allowed_origin: "*"
+    p2p:
+      listen_address: "" # set dynamically
+      seeds: "" # set dynamically
+      external_address: ""
+      persistent_peers: ""
+      addr_book_strict: false
+      max_num_inbound_peers: 40
+      max_num_outbound_peers: 10
+      allow_duplicate_ip: true
+    consensus:
+      timeout_commit: 5s
+      # these can be set to 1ms temporarily to recover from consensus failure faster
+      timeout_propose_delta: 500ms
+      timeout_prevote_delta: 500ms
+      timeout_precommit_delta: 500ms
+    state_sync:
+      enable: false
+      # The thorchain.info RPC is unreliable, so Nine Realms will be the trusted source
+      # until someone from the community hosts another. This must be an archive node for
+      # historical height verification.
+      rpc_servers: https://rpc-v1.ninerealms.com:443,https://rpc-v1.ninerealms.com:443
+      trust_height: 0
+      trust_hash: ""
+      trust_period: 360h0m0s
+    instrumentation:
+      prometheus: true

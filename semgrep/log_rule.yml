@@ -1,0 +1,6 @@
+rules:
+  - id: insecure-logging
+    pattern: <... ctx.Logger().$LEVEL(fmt.Sprintf(...)) ...>
+    message: Insecure usage of logging function could lead to log injection
+    languages: [go]
+    severity: WARNING

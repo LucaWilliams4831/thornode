@@ -1,0 +1,40 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+# create a node by bonding in
+type: tx-deposit
+signer: {{ addr_thor_fox }}
+coins:
+  - amount: "10000000000"
+    asset: "rune"
+memo: "bond:{{ addr_thor_fox }}"
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: node should exist
+endpoint: http://localhost:1317/thorchain/node/{{ addr_thor_fox }}
+asserts:
+- .total_bond == "10000000000"
+- .pub_key_set|length == 0
+- .validator_cons_pub_key|length == 0
+---
+# set node keys
+type: tx-set-node-keys
+signer: {{ addr_thor_fox }}
+pub_key_set: { "secp256k1": {{ pubkey_fox }}, "ed25519": {{ pubkey_fox }} }
+validator_cons_pub_key: tthorcpub1zcjduepq2rna6xpm3x9aklcvruxx4d3hd2j287m7hr92l8w0ag5g3606sgsqn3wsvj
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: node should have keys and paid a fee
+endpoint: http://localhost:1317/thorchain/node/{{ addr_thor_fox }}
+asserts:
+- .total_bond == "9998000000"
+- .pub_key_set|length == 2
+- .validator_cons_pub_key|length > 0

@@ -1,0 +1,641 @@
+{
+  "ban_voters": [],
+  "chain_contracts": [],
+  "errata_tx_voters": [],
+  "keygen_blocks": [],
+  "last_chain_heights": [{ "chain": "BNB", "height": "390" }],
+  "last_signed_height": "0",
+  "liquidity_providers": [
+    {
+      "asset": "BNB.BNB",
+      "asset_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+      "last_add_height": "32",
+      "last_withdraw_height": "0",
+      "pending_asset": "0",
+      "pending_rune": "0",
+      "pending_tx_Id": "E11B6DA6F57F73652227F44D0847AF8F0B23A9D1EA74A61F16F7C5E202B0F3EC",
+      "rune_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+      "units": "200000000000000"
+    },
+    {
+      "asset": "BNB.BTCB-101",
+      "asset_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+      "last_add_height": "32",
+      "last_withdraw_height": "0",
+      "pending_asset": "0",
+      "pending_rune": "0",
+      "pending_tx_Id": "FD3040423A187835199332365A618CCDE9D4CCADFE3C7A2AF4DB9E609383FC7F",
+      "rune_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+      "units": "150000000000"
+    },
+    {
+      "asset": "BNB.LOK-3C0",
+      "asset_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+      "last_add_height": "32",
+      "last_withdraw_height": "0",
+      "pending_asset": "0",
+      "pending_rune": "0",
+      "pending_tx_Id": "8A83AEBB9313D079BB3D08E6A798DD89D3B5BBBA71B9EAA2A2B31053854C307D",
+      "rune_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+      "units": "50000000000"
+    }
+  ],
+  "msg_swaps": [],
+  "network": {
+    "bond_reward_rune": "16847841043",
+    "burned_bep2_rune": "1000000000000000",
+    "burned_erc20_rune": "0",
+    "total_bond_units": "0"
+  },
+  "network_fee_voters": [
+    {
+      "block_height": "24",
+      "chain": "BNB",
+      "report_block_height": "258",
+      "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"]
+    },
+    {
+      "block_height": "16",
+      "chain": "ETH",
+      "report_block_height": "8",
+      "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"]
+    }
+  ],
+  "network_fees": [
+    {
+      "chain": "BNB",
+      "transaction_fee_rate": "37500",
+      "transaction_size": "1"
+    },
+    {
+      "chain": "ETH",
+      "transaction_fee_rate": "1",
+      "transaction_size": "80000"
+    }
+  ],
+  "node_accounts": [
+    {
+      "active_block_height": "1",
+      "bond": "0",
+      "bond_address": "tbnb162uv26hkjrvqdaqkhja0x4hvgkm8gem6vvv7p3",
+      "forced_to_leave": false,
+      "ip_address": "193.37.32.97",
+      "leave_score": "0",
+      "node_address": "tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5",
+      "pub_key_set": {
+        "ed25519": "tthorpub1zcjduepqqsr6gzf7vad2uens2uwf8v5kklcz2nav0kf78fkeljn63a4y0h2qqd92zk",
+        "secp256k1": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy"
+      },
+      "requested_to_leave": false,
+      "signer_membership": [],
+      "status": "Active",
+      "status_since": "0",
+      "validator_cons_pub_key": "tthorcpub1zcjduepq2rna6xpm3x9aklcvruxx4d3hd2j287m7hr92l8w0ag5g3606sgsqn3wsvj",
+      "version": "0.19.0"
+    }
+  ],
+  "observed_tx_in_voters": [
+    {
+      "actions": [],
+      "finalised_height": "24",
+      "height": "0",
+      "out_txs": [],
+      "reverted": true,
+      "tx": {
+        "block_height": "258",
+        "finalise_height": "258",
+        "keysign_ms": "0",
+        "observed_pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+        "out_hashes": [],
+        "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+        "status": "done",
+        "tx": {
+          "chain": "BNB",
+          "coins": [
+            {
+              "amount": "1000000000000000",
+              "asset": "BNB.RUNE-67C"
+            }
+          ],
+          "from_address": "tbnb1lltanv67yztkpt5czw4ajsmg94dlqnnhrq7zqm",
+          "gas": [
+            {
+              "amount": "37500",
+              "asset": "BNB.BNB"
+            }
+          ],
+          "id": "0ED05C7B82276B40A04C39FA2CF18F89448C59D9E4890DEC2EF1157F6F60D8A5",
+          "memo": "switch:tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+          "to_address": "tbnb1gqjc7zqg03t5jxt804262chmyxz6vn2x2v6j33"
+        }
+      },
+      "tx_id": "0ED05C7B82276B40A04C39FA2CF18F89448C59D9E4890DEC2EF1157F6F60D8A5",
+      "txs": [
+        {
+          "block_height": "258",
+          "finalise_height": "258",
+          "keysign_ms": "0",
+          "observed_pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+          "out_hashes": [],
+          "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+          "status": "incomplete",
+          "tx": {
+            "chain": "BNB",
+            "coins": [
+              {
+                "amount": "1000000000000000",
+                "asset": "BNB.RUNE-67C"
+              }
+            ],
+            "from_address": "tbnb1lltanv67yztkpt5czw4ajsmg94dlqnnhrq7zqm",
+            "gas": [
+              {
+                "amount": "37500",
+                "asset": "BNB.BNB"
+              }
+            ],
+            "id": "0ED05C7B82276B40A04C39FA2CF18F89448C59D9E4890DEC2EF1157F6F60D8A5",
+            "memo": "switch:tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+            "to_address": "tbnb1gqjc7zqg03t5jxt804262chmyxz6vn2x2v6j33"
+          }
+        }
+      ],
+      "updated_vault": true
+    },
+    {
+      "actions": [],
+      "finalised_height": "32",
+      "height": "0",
+      "out_txs": [],
+      "reverted": true,
+      "tx": {
+        "block_height": "388",
+        "finalise_height": "388",
+        "keysign_ms": "0",
+        "observed_pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+        "out_hashes": [],
+        "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+        "status": "done",
+        "tx": {
+          "chain": "BNB",
+          "coins": [
+            {
+              "amount": "100000000000",
+              "asset": "BNB.BNB"
+            }
+          ],
+          "from_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+          "gas": [
+            {
+              "amount": "37500",
+              "asset": "BNB.BNB"
+            }
+          ],
+          "id": "1798CA8030FC1EA1B1620A221EDE82032A1929558B3F39D72BA84FC6500C2647",
+          "memo": "add:BNB.BNB:tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+          "to_address": "tbnb1gqjc7zqg03t5jxt804262chmyxz6vn2x2v6j33"
+        }
+      },
+      "tx_id": "1798CA8030FC1EA1B1620A221EDE82032A1929558B3F39D72BA84FC6500C2647",
+      "txs": [
+        {
+          "block_height": "388",
+          "finalise_height": "388",
+          "keysign_ms": "0",
+          "observed_pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+          "out_hashes": [],
+          "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+          "status": "incomplete",
+          "tx": {
+            "chain": "BNB",
+            "coins": [
+              {
+                "amount": "100000000000",
+                "asset": "BNB.BNB"
+              }
+            ],
+            "from_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+            "gas": [
+              {
+                "amount": "37500",
+                "asset": "BNB.BNB"
+              }
+            ],
+            "id": "1798CA8030FC1EA1B1620A221EDE82032A1929558B3F39D72BA84FC6500C2647",
+            "memo": "add:BNB.BNB:tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+            "to_address": "tbnb1gqjc7zqg03t5jxt804262chmyxz6vn2x2v6j33"
+          }
+        }
+      ],
+      "updated_vault": true
+    },
+    {
+      "actions": [],
+      "finalised_height": "32",
+      "height": "0",
+      "out_txs": [],
+      "reverted": true,
+      "tx": {
+        "block_height": "390",
+        "finalise_height": "390",
+        "keysign_ms": "0",
+        "observed_pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+        "out_hashes": [],
+        "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+        "status": "done",
+        "tx": {
+          "chain": "BNB",
+          "coins": [
+            {
+              "amount": "40000000000",
+              "asset": "BNB.BTCB-101"
+            }
+          ],
+          "from_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+          "gas": [
+            {
+              "amount": "37500",
+              "asset": "BNB.BNB"
+            }
+          ],
+          "id": "65F7CF61F65A529181D8E82FE4C1E85F31CEE0ADCB230A670B998E663483A8AB",
+          "memo": "add:BNB.BTCB-101:tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+          "to_address": "tbnb1gqjc7zqg03t5jxt804262chmyxz6vn2x2v6j33"
+        }
+      },
+      "tx_id": "65F7CF61F65A529181D8E82FE4C1E85F31CEE0ADCB230A670B998E663483A8AB",
+      "txs": [
+        {
+          "block_height": "390",
+          "finalise_height": "390",
+          "keysign_ms": "0",
+          "observed_pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+          "out_hashes": [],
+          "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+          "status": "incomplete",
+          "tx": {
+            "chain": "BNB",
+            "coins": [
+              {
+                "amount": "40000000000",
+                "asset": "BNB.BTCB-101"
+              }
+            ],
+            "from_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+            "gas": [
+              {
+                "amount": "37500",
+                "asset": "BNB.BNB"
+              }
+            ],
+            "id": "65F7CF61F65A529181D8E82FE4C1E85F31CEE0ADCB230A670B998E663483A8AB",
+            "memo": "add:BNB.BTCB-101:tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+            "to_address": "tbnb1gqjc7zqg03t5jxt804262chmyxz6vn2x2v6j33"
+          }
+        }
+      ],
+      "updated_vault": true
+    },
+    {
+      "actions": [],
+      "finalised_height": "32",
+      "height": "0",
+      "out_txs": [],
+      "reverted": true,
+      "tx": {
+        "block_height": "389",
+        "finalise_height": "389",
+        "keysign_ms": "0",
+        "observed_pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+        "out_hashes": [],
+        "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+        "status": "done",
+        "tx": {
+          "chain": "BNB",
+          "coins": [
+            {
+              "amount": "40000000000",
+              "asset": "BNB.LOK-3C0"
+            }
+          ],
+          "from_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+          "gas": [
+            {
+              "amount": "37500",
+              "asset": "BNB.BNB"
+            }
+          ],
+          "id": "87FC357DA8FFE9B9F8E5F94A52637C67C6B9457E2A15EEB0B94EE61A4ACCF1D1",
+          "memo": "add:BNB.LOK-3C0:tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+          "to_address": "tbnb1gqjc7zqg03t5jxt804262chmyxz6vn2x2v6j33"
+        }
+      },
+      "tx_id": "87FC357DA8FFE9B9F8E5F94A52637C67C6B9457E2A15EEB0B94EE61A4ACCF1D1",
+      "txs": [
+        {
+          "block_height": "389",
+          "finalise_height": "389",
+          "keysign_ms": "0",
+          "observed_pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+          "out_hashes": [],
+          "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+          "status": "incomplete",
+          "tx": {
+            "chain": "BNB",
+            "coins": [
+              {
+                "amount": "40000000000",
+                "asset": "BNB.LOK-3C0"
+              }
+            ],
+            "from_address": "tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+            "gas": [
+              {
+                "amount": "37500",
+                "asset": "BNB.BNB"
+              }
+            ],
+            "id": "87FC357DA8FFE9B9F8E5F94A52637C67C6B9457E2A15EEB0B94EE61A4ACCF1D1",
+            "memo": "add:BNB.LOK-3C0:tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+            "to_address": "tbnb1gqjc7zqg03t5jxt804262chmyxz6vn2x2v6j33"
+          }
+        }
+      ],
+      "updated_vault": true
+    },
+    {
+      "actions": [],
+      "finalised_height": "28",
+      "height": "0",
+      "out_txs": [],
+      "reverted": true,
+      "tx": {
+        "block_height": "0",
+        "finalise_height": "0",
+        "keysign_ms": "0",
+        "observed_pub_key": "",
+        "out_hashes": [],
+        "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+        "status": "done",
+        "tx": {
+          "chain": "THOR",
+          "coins": [
+            {
+              "amount": "50000000000",
+              "asset": "THOR.RUNE"
+            }
+          ],
+          "from_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+          "gas": [
+            {
+              "amount": "100000000",
+              "asset": "THOR.RUNE"
+            }
+          ],
+          "id": "8A83AEBB9313D079BB3D08E6A798DD89D3B5BBBA71B9EAA2A2B31053854C307D",
+          "memo": "add:BNB.LOK-3C0:tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+          "to_address": "tthor1g98cy3n9mmjrpn0sxmn63lztelera37nrytwp2"
+        }
+      },
+      "tx_id": "8A83AEBB9313D079BB3D08E6A798DD89D3B5BBBA71B9EAA2A2B31053854C307D",
+      "txs": [
+        {
+          "block_height": "0",
+          "finalise_height": "0",
+          "keysign_ms": "0",
+          "observed_pub_key": "",
+          "out_hashes": [],
+          "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+          "status": "incomplete",
+          "tx": {
+            "chain": "THOR",
+            "coins": [
+              {
+                "amount": "50000000000",
+                "asset": "THOR.RUNE"
+              }
+            ],
+            "from_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+            "gas": [
+              {
+                "amount": "100000000",
+                "asset": "THOR.RUNE"
+              }
+            ],
+            "id": "8A83AEBB9313D079BB3D08E6A798DD89D3B5BBBA71B9EAA2A2B31053854C307D",
+            "memo": "add:BNB.LOK-3C0:tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+            "to_address": "tthor1g98cy3n9mmjrpn0sxmn63lztelera37nrytwp2"
+          }
+        }
+      ],
+      "updated_vault": false
+    },
+    {
+      "actions": [],
+      "finalised_height": "26",
+      "height": "0",
+      "out_txs": [],
+      "reverted": true,
+      "tx": {
+        "block_height": "0",
+        "finalise_height": "0",
+        "keysign_ms": "0",
+        "observed_pub_key": "",
+        "out_hashes": [],
+        "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+        "status": "done",
+        "tx": {
+          "chain": "THOR",
+          "coins": [
+            {
+              "amount": "200000000000000",
+              "asset": "THOR.RUNE"
+            }
+          ],
+          "from_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+          "gas": [
+            {
+              "amount": "100000000",
+              "asset": "THOR.RUNE"
+            }
+          ],
+          "id": "E11B6DA6F57F73652227F44D0847AF8F0B23A9D1EA74A61F16F7C5E202B0F3EC",
+          "memo": "add:BNB.BNB:tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+          "to_address": "tthor1g98cy3n9mmjrpn0sxmn63lztelera37nrytwp2"
+        }
+      },
+      "tx_id": "E11B6DA6F57F73652227F44D0847AF8F0B23A9D1EA74A61F16F7C5E202B0F3EC",
+      "txs": [
+        {
+          "block_height": "0",
+          "finalise_height": "0",
+          "keysign_ms": "0",
+          "observed_pub_key": "",
+          "out_hashes": [],
+          "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+          "status": "incomplete",
+          "tx": {
+            "chain": "THOR",
+            "coins": [
+              {
+                "amount": "200000000000000",
+                "asset": "THOR.RUNE"
+              }
+            ],
+            "from_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+            "gas": [
+              {
+                "amount": "100000000",
+                "asset": "THOR.RUNE"
+              }
+            ],
+            "id": "E11B6DA6F57F73652227F44D0847AF8F0B23A9D1EA74A61F16F7C5E202B0F3EC",
+            "memo": "add:BNB.BNB:tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+            "to_address": "tthor1g98cy3n9mmjrpn0sxmn63lztelera37nrytwp2"
+          }
+        }
+      ],
+      "updated_vault": false
+    },
+    {
+      "actions": [],
+      "finalised_height": "30",
+      "height": "0",
+      "out_txs": [],
+      "reverted": true,
+      "tx": {
+        "block_height": "0",
+        "finalise_height": "0",
+        "keysign_ms": "0",
+        "observed_pub_key": "",
+        "out_hashes": [],
+        "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+        "status": "done",
+        "tx": {
+          "chain": "THOR",
+          "coins": [
+            {
+              "amount": "150000000000",
+              "asset": "THOR.RUNE"
+            }
+          ],
+          "from_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+          "gas": [
+            {
+              "amount": "100000000",
+              "asset": "THOR.RUNE"
+            }
+          ],
+          "id": "FD3040423A187835199332365A618CCDE9D4CCADFE3C7A2AF4DB9E609383FC7F",
+          "memo": "add:BNB.BTCB-101:tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+          "to_address": "tthor1g98cy3n9mmjrpn0sxmn63lztelera37nrytwp2"
+        }
+      },
+      "tx_id": "FD3040423A187835199332365A618CCDE9D4CCADFE3C7A2AF4DB9E609383FC7F",
+      "txs": [
+        {
+          "block_height": "0",
+          "finalise_height": "0",
+          "keysign_ms": "0",
+          "observed_pub_key": "",
+          "out_hashes": [],
+          "signers": ["tthor1gqjc7zqg03t5jxt804262chmyxz6vn2xydy3u5"],
+          "status": "incomplete",
+          "tx": {
+            "chain": "THOR",
+            "coins": [
+              {
+                "amount": "150000000000",
+                "asset": "THOR.RUNE"
+              }
+            ],
+            "from_address": "tthor1m33k4tqk4ngwsksll4q3ppm9g6m80kp0qxtqzv",
+            "gas": [
+              {
+                "amount": "100000000",
+                "asset": "THOR.RUNE"
+              }
+            ],
+            "id": "FD3040423A187835199332365A618CCDE9D4CCADFE3C7A2AF4DB9E609383FC7F",
+            "memo": "add:BNB.BTCB-101:tbnb1m33k4tqk4ngwsksll4q3ppm9g6m80kp0w84r0f",
+            "to_address": "tthor1g98cy3n9mmjrpn0sxmn63lztelera37nrytwp2"
+          }
+        }
+      ],
+      "updated_vault": false
+    }
+  ],
+  "observed_tx_out_voters": [],
+  "pools": [
+    {
+      "asset": "BNB.BNB",
+      "balance_asset": "100000000000",
+      "balance_rune": "200000000000000",
+      "pool_units": "200000000000000",
+      "status": "Available"
+    },
+    {
+      "asset": "BNB.BTCB-101",
+      "balance_asset": "40000000000",
+      "balance_rune": "150000000000",
+      "pool_units": "150000000000",
+      "status": "Available"
+    },
+    {
+      "asset": "BNB.LOK-3C0",
+      "balance_asset": "40000000000",
+      "balance_rune": "50000000000",
+      "pool_units": "50000000000",
+      "status": "Available"
+    }
+  ],
+  "reserve": "0",
+  "reserve_contributors": [],
+  "tss_keysign_fail_voters": [],
+  "tss_voters": [],
+  "tx_outs": [],
+  "vaults": [
+    {
+      "block_height": "24",
+      "chains": ["THOR", "BTC", "LTC", "BCH", "BNB", "ETH", "AVAX"],
+      "coins": [
+        {
+          "amount": "1000000000000000",
+          "asset": "BNB.RUNE-67C"
+        },
+        {
+          "amount": "100000000000",
+          "asset": "BNB.BNB"
+        },
+        {
+          "amount": "40000000000",
+          "asset": "BNB.LOK-3C0"
+        },
+        {
+          "amount": "40000000000",
+          "asset": "BNB.BTCB-101"
+        }
+      ],
+      "contracts": [
+        {
+          "chain": "ETH",
+          "contract": "0xE65e9d372F8cAcc7b6dfcd4af6507851Ed31bb44"
+        },
+        {
+          "chain": "AVAX",
+          "contract": "0x17aB05351fC94a1a67Bf3f56DdbB941aE6c63E25"
+        }
+      ],
+      "inbound_tx_count": "4",
+      "membership": [
+        "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy"
+      ],
+      "outbound_tx_count": "0",
+      "pending_tx_block_heights": [],
+      "pub_key": "tthorpub1addwnpepq0j6krtcxn2nf8pcgsfrme0xuujj428ky927amjhv5jx4xrl36jt2lt0wcy",
+      "status": "ActiveVault",
+      "status_since": "0",
+      "type": "AsgardVault"
+    }
+  ]
+}

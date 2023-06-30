@@ -1,0 +1,14 @@
+.trunk
+__pycache__
+build/lambda
+build/docker
+ci
+docs
+semgrep
+bugbounty.md
+LICENSE
+README.md
+test/regression/mnt
+test/regression/suites
+test/regression/templates
+.git

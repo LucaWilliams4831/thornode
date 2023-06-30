@@ -1,0 +1,23 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: pools should not be halted
+endpoint: http://localhost:1317/thorchain/inbound_addresses
+asserts:
+- .[0].halted == false
+---
+type: tx-node-pause-chain
+signer: {{ addr_thor_dog }}
+value: 666
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: pools should be halted
+endpoint: http://localhost:1317/thorchain/inbound_addresses
+asserts:
+- .[0].halted == true

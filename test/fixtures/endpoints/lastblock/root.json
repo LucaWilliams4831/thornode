@@ -1,0 +1,32 @@
+[
+  {
+    "chain": "BCH",
+    "last_observed_in": 684829,
+    "last_signed_out": 224725,
+    "thorchain": 224830
+  },
+  {
+    "chain": "BNB",
+    "last_observed_in": 158976911,
+    "last_signed_out": 224725,
+    "thorchain": 224830
+  },
+  {
+    "chain": "BTC",
+    "last_observed_in": 680452,
+    "last_signed_out": 224725,
+    "thorchain": 224830
+  },
+  {
+    "chain": "ETH",
+    "last_observed_in": 12304810,
+    "last_signed_out": 224725,
+    "thorchain": 224830
+  },
+  {
+    "chain": "LTC",
+    "last_observed_in": 2040528,
+    "last_signed_out": 224725,
+    "thorchain": 224830
+  }
+]

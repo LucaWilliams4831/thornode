@@ -1,0 +1,46 @@
+{{ template "default-state.yaml" }}
+---
+type: create-blocks
+count: 1
+---
+type: tx-observed-in
+signer: {{ addr_thor_dog }}
+txs:
+  - tx:
+      id: "{{ observe_txid 1 }}"
+      chain: BTC
+      from_address: {{ addr_btc_fox }}
+      to_address: {{ addr_btc_dog }}
+      coins:
+        - amount: "200000000"
+          asset: "BTC.BTC"
+          decimals: 8
+      gas:
+        - amount: "10000"
+          asset: "BTC.BTC"
+      memo: "donate:"
+    block_height: 1
+    finalise_height: 1
+    observed_pub_key: {{ pubkey_dog }}
+---
+type: create-blocks
+count: 1
+---
+type: tx-solvency
+signer: {{ addr_thor_dog }}
+chain: "BTC"
+pub_key: {{ pubkey_dog }}
+coins:
+  - amount: "100000000"
+    asset: "BTC.BTC"
+    decimals: 8
+Height: 1
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: should be halted
+endpoint: http://localhost:1317/thorchain/mimir
+asserts:
+- .["SOLVENCYHALTBTCCHAIN"] == 3

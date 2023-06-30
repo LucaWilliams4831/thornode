@@ -1,0 +1,161 @@
+type: state
+genesis:
+  initial_height: "10550000"
+  app_state:
+    auth:
+      accounts:
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "1"
+            address: {{ addr_module_asgard }}
+            pub_key: ~
+            sequence: "0"
+          name: asgard
+          permissions: []
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "3"
+            address: {{ addr_module_reserve }}
+            pub_key: ~
+            sequence: "0"
+          name: reserve
+          permissions: []
+        - "@type": /cosmos.auth.v1beta1.ModuleAccount
+          base_account:
+            account_number: "5"
+            address: {{ addr_module_bond }}
+            pub_key: ~
+            sequence: "0"
+          name: bond
+          permissions: []
+        - "@type": /cosmos.auth.v1beta1.BaseAccount
+          address: {{ addr_thor_dog }}
+          pub_key: null
+          account_number: "6"
+          sequence: "0"
+    bank:
+      balances:
+        - address: {{ addr_thor_dog }}
+          coins:
+            - denom: rune
+              amount: "5000000000000"
+        - address: {{ addr_module_reserve }}
+          coins:
+            - amount: "35000000000000"
+              denom: rune
+        - address: {{ addr_module_asgard }}
+          coins:
+            - amount: "69678825132"
+              denom: btc/btc
+        - address: {{ addr_module_bond }}
+          coins:
+            - amount: "5000000000000"
+              denom: rune
+    thorchain:
+      store_version: "108"  # start at 108 so we run the 109 migration
+      mimirs:
+        - key: MAXSYNTHPERPOOLDEPTH
+          value: "5000"
+      node_accounts:
+        - active_block_height: "0"
+          bond: "5000000000000"
+          ip_address: 1.1.1.1
+          node_address: {{ addr_thor_dog }}
+          bond_address: {{ addr_thor_dog }}
+          pub_key_set:
+            secp256k1: "tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4"
+            ed25519: "tthorpub1zcjduepqfan43w2emjhfv45gspf98squqlnl2rcchc3e4dx7z2nxr27edflsy2e8ql"
+          signer_membership: []
+          status: Active
+          # matches the priv_validator_key.json mounted in the test container
+          validator_cons_pub_key: tthorcpub1zcjduepqq75h7uy6qhesh9d3a9tuk0mzrnc46u8rye44ze6peua3zmpfh23q8z37sz
+          version: "1.108.0" # Start at V108 so that it can load mgr with the current version before changing to V109.
+# The below pool amount is taken from the actual block 10550000
+      pools:
+        - LP_units: "367723442089047"
+          asset: BTC.BTC
+          balance_asset: "78448383748"
+          balance_rune: "1568367900805642"
+          pending_inbound_asset: "261604476"
+          pending_inbound_rune: "3966668292609"
+          status: Available
+          synth_units: "356732557956834"
+      vaults:
+        - block_height: "9867677"
+          chains:
+            - THOR
+            - BTC
+          coins:
+            - amount: "78448383748"
+              asset: BTC.BTC
+          inbound_tx_count: "2241"
+          membership:
+            - tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4
+          pub_key: tthorpub1addwnpepqfshsq2y6ejy2ysxmq4gj8n8mzuzyulk9wh4n946jv5w2vpwdn2yuyp6sp4
+          status: ActiveVault
+          type: AsgardVault
+---
+type: create-blocks
+count: 1
+---
+type: check
+description: at least one ActiveVault Asgard should exist
+endpoint: http://localhost:1317/thorchain/vaults/asgard
+asserts:
+  - .|[.[]|select(.status == "ActiveVault")]|length > 0
+---
+type: check
+description: the version should currently be 1.108.0
+endpoint: http://localhost:1317/thorchain/version
+asserts:
+  - .|.current == "1.108.0"
+---
+type: tx-version
+version: "1.109.0"
+signer: {{ addr_thor_dog }}
+---
+type: create-blocks
+count: 2 # Two blocks to be sure the store migration takes place before the next check.
+---
+type: check
+description: the version should now have been increased to 1.109.0
+endpoint: http://localhost:1317/thorchain/version
+asserts:
+  - .|.current == "1.109.0"
+---
+type: check
+description: first TX should be "observed"
+endpoint: http://localhost:1317/thorchain/tx/1771d234f38e13fd9e4672fe469342fd598b6a2931f311d01b12dd4f35e9ce5c/signers
+asserts:
+  - .|.tx_id == "1771d234f38e13fd9e4672fe469342fd598b6a2931f311d01b12dd4f35e9ce5c"
+  - .|.tx.status == "done"
+  - .|.tx.tx.memo == "+:BTC/BTC"
+  - .|.tx.signers|length == 1
+  - .|.updated_vault == true
+---
+type: check
+description: second TX should be "observed"
+endpoint: http://localhost:1317/thorchain/tx/5c4ad18723fe385946288574760b2d563f52a8917cdaf850d66958cd472db07a/signers
+asserts:
+  - .|.tx_id == "5c4ad18723fe385946288574760b2d563f52a8917cdaf850d66958cd472db07a"
+  - .|.tx.status == "done"
+  - .|.tx.tx.memo == "+:BTC/BTC"
+  - .|.tx.signers|length == 1
+  - .|.updated_vault == true
+---
+type: check
+description: third TX should be "observed"
+endpoint: http://localhost:1317/thorchain/tx/96eca0eb4be36ac43fa2b2488fd3468aa2079ae02ae361ef5c08a4ace5070ed1/signers
+asserts:
+  - .|.tx_id == "96eca0eb4be36ac43fa2b2488fd3468aa2079ae02ae361ef5c08a4ace5070ed1"
+  - .|.tx.status == "done"
+  - .|.tx.tx.memo == "+:BTC/BTC"
+  - .|.tx.signers|length == 1
+  - .|.updated_vault == true
+---
+type: check
+description: user should now have a savers position
+endpoint: http://localhost:1317/thorchain/pool/BTC.BTC/saver/tb1qehshltuxerv4zt4ruzxufd8m6r5xll7rdwa2rq
+asserts:
+  - .|.asset_deposit_value == "39992352"
+---
